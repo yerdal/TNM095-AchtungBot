@@ -14,8 +14,7 @@ function startGame() {
 
 var gameArea = {
     canvas: document.getElementById("canvas"),
-    start : function() {
-        
+    start : function() {        
         this.context = this.canvas.getContext("2d");
         this.interval = setInterval(updateGameArea, 20);
         window.addEventListener('keydown', function (e) {
@@ -26,9 +25,6 @@ var gameArea = {
             gameArea.keys[e.keyCode] = (e.type == "keydown");
         })
     },
-    clear : function(){
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
 }
 
 
