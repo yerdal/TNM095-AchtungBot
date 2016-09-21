@@ -1,4 +1,4 @@
-var myGamePiece;
+var gamePiece;
 
 function startGame() {
     gameArea.start();
@@ -14,7 +14,7 @@ var gameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 20);
         window.addEventListener('keydown', function (e) {
-            gameArea.keys = (myGameArea.keys || []);
+            gameArea.keys = (gameArea.keys || []);
             gameArea.keys[e.keyCode] = (e.type == "keydown");
         })
         window.addEventListener('keyup', function (e) {
@@ -46,9 +46,8 @@ function component(width, height, color, x, y) {
     }
 }
 function updateGameArea() {
-    //myGameArea.clear();
-    myGamePiece.speedX = 0;
-    myGamePiece.speedY = 0;
+    gamePiece.speedX = 0;
+    gamePiece.speedY = 0;
     if (gameArea.keys && gameArea.keys[37]) {gamePiece.speedX = -2; }
     if (gameArea.keys && gameArea.keys[39]) {gamePiece.speedX = 2; }
     if (gameArea.keys && gameArea.keys[38]) {gamePiece.speedY = -2; }
