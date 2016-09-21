@@ -1,5 +1,12 @@
 var gamePiece;
-
+const UP_KEY = 38;
+const DOWN_KEY = 40;
+const RIGHT_KEY = 39;
+const LEFT_KEY = 37;
+var currSpeed = {
+    x: 0,
+    y: 0
+}
 function startGame() {
     gameArea.start();
     gamePiece = new component(3, 3, "red", 10, 120);
@@ -31,27 +38,48 @@ function component(width, height, color, x, y) {
     this.gamearea = gameArea;
     this.width = width;
     this.height = height;
-    this.speedX = 0;
-    this.speedY = 0;
-    this.x = x;
-    this.y = y;
+    this.speed = {
+        x: 0,
+        y: 0
+    }
+    this.position = {
+        x: x,
+        y: y
+    }
     this.update = function() {
         ctx = gameArea.context;
         ctx.fillStyle = color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
     this.newPos = function() {
-        this.x += this.speedX;
-        this.y += this.speedY;
+        this.position.x += this.speed.x;
+        this.position.y += this.speed.y;
     }
 }
+
 function updateGameArea() {
-    gamePiece.speedX = 0;
-    gamePiece.speedY = 0;
-    if (gameArea.keys && gameArea.keys[37]) {gamePiece.speedX = -2; }
-    if (gameArea.keys && gameArea.keys[39]) {gamePiece.speedX = 2; }
-    if (gameArea.keys && gameArea.keys[38]) {gamePiece.speedY = -2; }
-    if (gameArea.keys && gameArea.keys[40]) {gamePiece.speedY = 2; }
+
+    if (gameArea.keys && gameArea.keys[LEFT_KEY]) {
+        gamePiece.speed.x = -2;
+        gamePiece.speed.y = 0;
+    }
+    if (gameArea.keys && gameArea.keys[RIGHT_KEY]) {
+        gamePiece.speed.x = 2;
+        gamePiece.speed.y = 0;
+    }
+    if (gameArea.keys && gameArea.keys[UP_KEY]) {
+        gamePiece.speed.y = -2;
+        gamePiece.speed.x = 0;
+    }
+    if (gameArea.keys && gameArea.keys[DOWN_KEY]) {
+        gamePiece.speed.y = 2;
+        gamePiece.speed.x = 0;
+    }
     gamePiece.newPos();
     gamePiece.update();
+}
+
+function prevState(direction) {
+
+
 }
