@@ -91,13 +91,13 @@ function component(width, height, color, x, y) {
 
 function updateGameArea() {
 
-    gamePiece.speed = 0;
+    gamePiece.speed = 2;
     gamePiece.moveAngle = 0;
     if (gameArea.keys && gameArea.keys[LEFT_KEY]) {gamePiece.moveAngle = -4; }
     if (gameArea.keys && gameArea.keys[RIGHT_KEY]) {gamePiece.moveAngle = 4; }
+
     //if (gameArea.keys && gameArea.keys[UP_KEY]) {gamePiece.speed = -2; }
     //if (gameArea.keys && gameArea.keys[DOWN_KEY]) {gamePiece.speed = 2; }
-    gamePiece.speed = 1.5;
     gamePiece.newPos();
     gamePiece.update();
 }
