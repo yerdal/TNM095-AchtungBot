@@ -9,19 +9,29 @@ var currSpeed = {
     x: 0,
     y: 0
 }
+var worm ={
+	width: 3,
+	height: 3,
+	color: "red",
+	xPos: 10,
+	yPos: 120
+}
 function startGame() {
-    gameArea.start();
-    gamePiece = new component(3, 3, "red", 10, 120);
+	gameArea.start();
+    gamePiece = new component(worm);
+}
+
+function loadScreen(){
+	gameArea.load();
 }
 
 var gameArea = {
     canvas: document.createElement("canvas"),
-    start : function() {        
+    load : function() {        
     	this.canvas.width = screenWidth;
     	this.canvas.height = screenHeight;
         this.context = this.canvas.getContext("2d");
-        this.interval = setInterval(updateGameArea, 20);
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         window.addEventListener('keydown', function (e) {
             gameArea.keys = (gameArea.keys || []);
             gameArea.keys[e.keyCode] = (e.type == "keydown");
@@ -30,13 +40,17 @@ var gameArea = {
             gameArea.keys[e.keyCode] = (e.type == "keydown");
         })
     },
+    start: function(){
+    	this.interval = setInterval(updateGameArea, 20);
+       
+    },
 }
 
 
-function component(width, height, color, x, y) {
+function component(worm) {
     this.gamearea = gameArea;
-    this.width = width;
-    this.height = height;
+    this.width = worm.width;
+    this.height = worm.height;
 
     this.speed = 0;
     this.angle = 0;
@@ -45,47 +59,45 @@ function component(width, height, color, x, y) {
         x: 0,
         y: 0
     }
-    this.position = {
-        x: x,
-        y: y
-    }
+    /*this.position = {
+        x: worm.xPos,
+        y: worm.yPos
+    }*/
 
     this.update = function() {
         ctx = gameArea.context;
         ctx.save();
-        ctx.translate(this.position.x, this.position.y);
+        ctx.translate(worm.xPos, worm.yPos);
         ctx.rotate(this.angle);
-        ctx.fillStyle = color;
+        ctx.fillStyle = worm.color;
         //ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.fillRect(this.width / -2, this.height / -2, this.width, this.height);
         ctx.restore();
     }
     this.newPos = function() {
     	this.angle += this.moveAngle * Math.PI / 180;
-        this.position.x += this.speed * Math.sin(this.angle);
-        this.position.y -= this.speed * Math.cos(this.angle);
-        this.checkBorder();
+        worm.xPos += this.speed * Math.sin(this.angle);
+        worm.yPos -= this.speed * Math.cos(this.angle);
+        this.checkBorder(worm, gameArea.context);
 
     }
 
-    this.checkBorder = function(){
-    	var bottom = this.gamearea.canvas.height - this.height;
-    	var top = this.height;
-    	var leftSide = this.width;
-    	var rightSide = this.gamearea.canvas.width - this.width;
-		if (this.position.y > bottom) {
-			console.log("BOTTOM IS REACEHD");
-	            this.position.y = 2;
-	    }else if(this.position.y < top){
-	    	console.log("TOP REACHED")
-	    	this.position.y = this.gamearea.canvas.height-2;
-	    }else if(this.position.x > rightSide){
-	    	this.position.x = 2;
-	    }
-	    else if(this.position.x < leftSide){
-	    	this.position.x = this.gamearea.canvas.width-2;
-	    }
+    this.checkBorder = function(worm, ctx){
 
+    	if(worm.xPos+worm.width > this.gamearea.canvas.width && worm.xPos > this.gamearea.canvas.width){
+    		ctx.fillRect(worm.x-this.gamearea.canvas.width, worm.y, worm.width, worm.height );
+    		worm.xPos = 0;
+
+    	}else if(worm.xPos < 0){
+    		worm.xPos = this.gamearea.canvas.width;
+    	}
+
+    	if(worm.yPos+worm.height > this.gamearea.canvas.height && worm.yPos > this.gamearea.canvas.height){
+    		ctx.fillRect(worm.x, worm.y-this.gamearea.canvas.height, worm.width, worm.height );
+    		worm.yPos = 0;
+    	}else if(worm.yPos < 0){
+    		worm.yPos = this.gamearea.canvas.height;
+    	}
     }
 }
 
