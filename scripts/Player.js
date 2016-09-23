@@ -24,12 +24,14 @@ function Player(width, height, color, x, y, gameArea) {
 	    ctx.fillRect(this.width / -2, this.height / -2, this.width, this.height);
 	    ctx.restore();
 	}
+
 	this.newPos = function() {
 		this.angle += this.moveAngle * Math.PI / 180;
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 	    this.checkBorder();
 	}
+	
 	this.checkBorder = function(){
 		if(this.position.x+this.width > this.gamearea.canvas.width && this.position.x > this.gamearea.canvas.width){
 			ctx.fillRect(this.position.x-this.gamearea.canvas.width, this.position.y, this.width, this.height );
@@ -48,4 +50,5 @@ function Player(width, height, color, x, y, gameArea) {
 	}
 	
 }
+
 module.exports = Player;

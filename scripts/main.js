@@ -8,6 +8,12 @@ const SCREEN_WIDTH = window.innerWidth-100;
 const SCREEN_HEIGHT= window.innerHeight-100;
 var Player = require("./Player");
 var player;
+var startBtn = document.getElementById("start-btn");
+
+startBtn.addEventListener("click", function() {
+    startGame();
+})
+
 function startGame() {
     gameArea.load();
     gameArea.start();
@@ -47,5 +53,3 @@ function updateGameArea() {
     player.newPos();
     player.update();
 }
-
-startGame();
