@@ -8,7 +8,11 @@ class Player {
 		this.angle = 0;
 		this.moveAngle = 0;
 		this.color = color;
+
+		//this.canvasWidth = this.gameArea.canvas.width; 
+		//this.canvasHeight = this.gameArea.canvas.height;
 		this.ctx = this.gameArea.context;
+
 		this.position = {
 		    x: x,
 		    y: y
@@ -26,11 +30,17 @@ class Player {
 	}
 
 	newPos() {
+		var newAngle = this.moveAngle * Math.PI / 180; 
 		this.angle += this.moveAngle * Math.PI / 180;
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 	    this.checkCollisions();
 	}
+
+
+
+
+		//if(this.position.x+this.width > this.canvasWidth && this.position.x > this.canvasWidth){
 
 	checkCollisions() {
 		this.checkWallCollision();
@@ -38,18 +48,22 @@ class Player {
 	}
 
 	checkWallCollision() {
-		if(this.position.x+this.width > this.gameArea.canvas.width && this.position.x > this.gameArea.canvas.width){
+		var canvasWidth = this.gameArea.canvas.width;
+		var canvasHeight = this.gameArea.canvas.height;
+		
+		if(this.position.x+this.width >= canvasWidth && this.position.x > canvasWidth){
 			this.position.x = 0;
 		}else if(this.position.x < 0){
-			this.position.x = this.gameArea.canvas.width;
+			this.position.x = canvasWidth;
 		}
-
-		if(this.position.y+this.height > this.gameArea.canvas.height && this.position.y > this.gameArea.canvas.height){
+		if(this.position.y+this.height > canvasHeight && this.position.y > canvasHeight){
 			this.position.y = 0;
+		
 		}else if(this.position.y < 0){
-			this.position.y = this.gameArea.canvas.height;
+			this.position.y = canvasHeight;
 		}
 	}
+
 	checkWormCollision() {
 		var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
 		for (var i = 0; i < pixelColors.data.length; i++) {
