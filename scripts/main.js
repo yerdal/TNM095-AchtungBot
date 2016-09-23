@@ -14,7 +14,6 @@ function startGame() {
     player = new Player(3, 3, "red", 10, 120, gameArea);
 }
 
-
 function loadScreen(){
 	gameArea.load();
 }
