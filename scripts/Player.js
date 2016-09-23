@@ -8,6 +8,8 @@ class Player {
 		this.moveAngle = 0;
 		this.color = color;
 		this.ctx = this.gamearea.context;
+		this.canvasWidth = this.gamearea.canvas.width; 
+		this.canvasHeight = this.gamearea.canvas.height;
 		this.position = {
 		    x: x,
 		    y: y
@@ -22,6 +24,7 @@ class Player {
 		this.ctx.restore();
 	}
 	newPos() {
+		var newAngle = this.moveAngle * Math.PI / 180; 
 		this.angle += this.moveAngle * Math.PI / 180;
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
@@ -29,19 +32,24 @@ class Player {
 	}
 
 	checkBorder() {
-		if(this.position.x+this.width > this.gamearea.canvas.width && this.position.x > this.gamearea.canvas.width){
-			this.ctx.fillRect(this.position.x-this.gamearea.canvas.width, this.position.y, this.width, this.height );
-			this.position.x = 0;
 
-		}else if(this.position.x < 0){
-			this.position.x = this.gamearea.canvas.width;
+		if(this.position.x+this.width > this.canvasWidth && this.position.x > this.canvasWidth){
+			this.position.x = 0;
+			this.ctx.fillRect(this.position.x-this.canvasWidth, this.position.y, this.width, this.height);
 		}
 
-		if(this.position.y+this.height > this.gamearea.canvas.height && this.position.y > this.gamearea.canvas.height){
-			this.ctx.fillRect(this.position.x, this.position.y-this.gamearea.canvas.height, this.width, this.height);
+		if(this.position.x < 0){
+			this.position.x = this.canvasWidth;
+		}
+
+		if(this.position.y+this.height > this.canvasHeight && this.position.y > this.canvasHeight){
 			this.position.y = 0;
-		}else if(this.position.y < 0){
-			this.position.y = this.gamearea.canvas.height;
+			this.ctx.fillRect(this.position.x, this.position.y-this.canvasHeight, this.width, this.height);
+		
+		}
+
+		if(this.position.y < 0){
+			this.position.y = this.canvasHeight;
 		}
 	}
 
