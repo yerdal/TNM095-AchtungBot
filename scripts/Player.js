@@ -3,13 +3,9 @@ function Player(width, height, color, x, y, gameArea) {
 	this.width = width;
 	this.height = height;
 
-	this.speed = 0;
+	this.speed = 2;
 	this.angle = 0;
 	this.moveAngle = 0;
-	this.speed = {
-	    x: 0,
-	    y: 0
-	}
 	this.position = {
 	    x: x,
 	    y: y
@@ -31,7 +27,7 @@ function Player(width, height, color, x, y, gameArea) {
 	    this.position.y -= this.speed * Math.cos(this.angle);
 	    this.checkBorder();
 	}
-	
+
 	this.checkBorder = function(){
 		if(this.position.x+this.width > this.gamearea.canvas.width && this.position.x > this.gamearea.canvas.width){
 			ctx.fillRect(this.position.x-this.gamearea.canvas.width, this.position.y, this.width, this.height );
