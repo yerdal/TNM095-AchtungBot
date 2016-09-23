@@ -25,17 +25,7 @@ class Game {
 		}.bind(this));
 	}
 	start() {
-		this.interval = setInterval(function() {
-			this.player.moveAngle = 0;
-			this.enemy.moveAngle = Math.random();
-
-			if (this.keys && this.keys[LEFT_KEY]) {this.player.moveAngle = -4;}
-			if (this.keys && this.keys[RIGHT_KEY]) {this.player.moveAngle = 4;}
-			this.player.newPos();
-			this.player.update();
-			this.enemy.newPos();
-			this.enemy.update();
-		}.bind(this), 20);
+		this.interval = setInterval(this.updateGameArea.bind(this), 20);
 	}
 	updateGameArea() {
 		this.player.moveAngle = 0;
