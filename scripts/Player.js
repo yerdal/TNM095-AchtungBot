@@ -39,15 +39,12 @@ class Player {
 
 	checkWallCollision() {
 		if(this.position.x+this.width > this.gameArea.canvas.width && this.position.x > this.gameArea.canvas.width){
-			this.ctx.fillRect(this.position.x-this.gameArea.canvas.width, this.position.y, this.width, this.height );
 			this.position.x = 0;
-
 		}else if(this.position.x < 0){
 			this.position.x = this.gameArea.canvas.width;
 		}
 
 		if(this.position.y+this.height > this.gameArea.canvas.height && this.position.y > this.gameArea.canvas.height){
-			this.ctx.fillRect(this.position.x, this.position.y-this.gameArea.canvas.height, this.width, this.height);
 			this.position.y = 0;
 		}else if(this.position.y < 0){
 			this.position.y = this.gameArea.canvas.height;

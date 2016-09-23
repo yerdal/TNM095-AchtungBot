@@ -3,7 +3,6 @@ const UP_KEY = 38;
 const DOWN_KEY = 40;
 const RIGHT_KEY = 39;
 const LEFT_KEY = 37;
-var i = 0;
 class Game {
 	constructor(width, height) {
 		this.canvas = document.createElement("canvas");
