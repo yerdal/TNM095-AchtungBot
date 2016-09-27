@@ -1,4 +1,9 @@
 
+const UP_KEY = 38;
+const DOWN_KEY = 40;
+const RIGHT_KEY = 39;
+const LEFT_KEY = 37;
+
 class Player {
 	constructor(width, height, color, x, y, gameArea) {
 		this.gameArea = gameArea;
@@ -37,7 +42,15 @@ class Player {
 	    this.checkCollisions();
 	}
 
-
+	addListeners() {
+		window.addEventListener('keydown', function (e) {
+		    this.keys = (this.keys || []);
+		    this.keys[e.keyCode] = (e.type == "keydown");
+		}.bind(this));
+		window.addEventListener('keyup', function (e) {
+		    this.keys[e.keyCode] = (e.type == "keydown");
+		}.bind(this));
+	}
 
 
 		//if(this.position.x+this.width > this.canvasWidth && this.position.x > this.canvasWidth){

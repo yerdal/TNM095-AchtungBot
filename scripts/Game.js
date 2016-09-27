@@ -1,8 +1,5 @@
 var Worm = require("./Player");
-const UP_KEY = 38;
-const DOWN_KEY = 40;
-const RIGHT_KEY = 39;
-const LEFT_KEY = 37;
+
 class Game {
 	constructor(width, height) {
 		this.canvas = document.createElement("canvas");
@@ -14,16 +11,6 @@ class Game {
 		this.enemy = new Worm(3, 3, "red", 150, 110, this);
 		this.addListeners();
 
-	}
-
-	addListeners() {
-		window.addEventListener('keydown', function (e) {
-		    this.keys = (this.keys || []);
-		    this.keys[e.keyCode] = (e.type == "keydown");
-		}.bind(this));
-		window.addEventListener('keyup', function (e) {
-		    this.keys[e.keyCode] = (e.type == "keydown");
-		}.bind(this));
 	}
 
 	start() {
