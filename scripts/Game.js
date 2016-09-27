@@ -1,4 +1,5 @@
-var Worm = require("./Player");
+var Player = require("./Player");
+var Bot = require("./Bot");
 const UP_KEY = 38;
 const DOWN_KEY = 40;
 const RIGHT_KEY = 39;
@@ -10,10 +11,9 @@ class Game {
 		this.canvas.height = height;
 		this.context = this.canvas.getContext("2d");
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-		this.player = new Worm(3, 3, "blue", 10, 120, this);
-		this.enemy = new Worm(3, 3, "red", 150, 110, this);
+		this.player = new Player(3, 3, "blue", 10, 120, this, false);
+		this.enemy = new Bot(3, 3, "red", 20, 120, this, true);
 		this.addListeners();
-
 	}
 
 	addListeners() {
@@ -32,7 +32,8 @@ class Game {
 
 	updateGameArea() {
 		this.player.moveAngle = 0;
-		this.enemy.moveAngle = Math.random();
+		//this.enemy.moveAngle = Math.random();
+		this.enemy.moveAngle = 0;
 		if (this.keys && this.keys[LEFT_KEY]) {this.player.moveAngle = -4;}
 		if (this.keys && this.keys[RIGHT_KEY]) {this.player.moveAngle = 4;}
 		this.player.newPos();

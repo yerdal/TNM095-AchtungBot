@@ -1,4 +1,3 @@
-
 class Player {
 	constructor(width, height, color, x, y, gameArea) {
 		this.gameArea = gameArea;
@@ -9,8 +8,6 @@ class Player {
 		this.moveAngle = 0;
 		this.color = color;
 
-		//this.canvasWidth = this.gameArea.canvas.width; 
-		//this.canvasHeight = this.gameArea.canvas.height;
 		this.ctx = this.gameArea.context;
 
 		this.position = {
@@ -34,13 +31,9 @@ class Player {
 		this.angle += this.moveAngle * Math.PI / 180;
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
+
 	    this.checkCollisions();
 	}
-
-
-
-
-		//if(this.position.x+this.width > this.canvasWidth && this.position.x > this.canvasWidth){
 
 	checkCollisions() {
 		this.checkWallCollision();

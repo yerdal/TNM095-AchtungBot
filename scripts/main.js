@@ -8,4 +8,5 @@ var canvas = document.createElement("canvas");
 
 startBtn.onclick = (event) => {
     new Game(SCREEN_WIDTH, SCREEN_HEIGHT).start();
+    startBtn.display = "none";
 }
