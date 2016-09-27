@@ -1,3 +1,9 @@
+
+const UP_KEY = 38;
+const DOWN_KEY = 40;
+const RIGHT_KEY = 39;
+const LEFT_KEY = 37;
+
 class Player {
 	constructor(width, height, color, x, y, gameArea) {
 		this.gameArea = gameArea;
@@ -7,7 +13,7 @@ class Player {
 		this.angle = 0;
 		this.moveAngle = 0;
 		this.color = color;
-
+		this.addListeners();
 		this.ctx = this.gameArea.context;
 
 		this.position = {
@@ -27,12 +33,23 @@ class Player {
 	}
 
 	newPos() {
+		if (this.keys && this.keys[LEFT_KEY]) {this.moveAngle = -4;}
+		if (this.keys && this.keys[RIGHT_KEY]) {this.moveAngle = 4;}
 		var newAngle = this.moveAngle * Math.PI / 180; 
 		this.angle += this.moveAngle * Math.PI / 180;
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 
 	    this.checkCollisions();
+	}
+	addListeners() {
+		window.addEventListener('keydown', function (e) {
+		    this.keys = (this.keys || []);
+		    this.keys[e.keyCode] = (e.type == "keydown");
+		}.bind(this));
+		window.addEventListener('keyup', function (e) {
+		    this.keys[e.keyCode] = (e.type == "keydown");
+		}.bind(this));
 	}
 
 	checkCollisions() {

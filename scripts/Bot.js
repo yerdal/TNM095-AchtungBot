@@ -18,12 +18,12 @@ class Bot extends Player {
 	}
 
 	newPos() {
-		console.log("hej");
+		console.log("tjuuu");
 		var newAngle = this.moveAngle * Math.PI / 180; 
 		this.angle += this.moveAngle * Math.PI / 180;
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
-	   this.decide();
+	   	this.decide();
 	    this.checkCollisions();
 	}
 	
