@@ -1,2 +1,2 @@
-# TNM095-ActungBot
-Project in the course Artificial Intelligence for interactive media
+# TNM095-AchtungBot
+An Ai-bot for the game "Achtung die kurve".
