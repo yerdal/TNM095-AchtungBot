@@ -78,19 +78,22 @@ class Player {
 	}
 
 	updateGrid(){
-		var grid = this.gameArea.grid;
-		var gridWidth = this.gameArea.canvas.height / 2;
-		var gridHeight = this.gameArea.canvas.height/ 2;
+		//var grid = this.gameArea.grid;
+		var gridSize = this.gameArea.gridSize;
+		var gridWidth = this.gameArea.canvas.width / gridSize;
+		var gridHeight = this.gameArea.canvas.height / gridSize;
+		var counter = 0;
 
-		if (this.position.x < gridWidth && this.position.y < gridHeight) {
-				grid[0] += 1;
-			} else if (this.position.x >= gridWidth && this.position.y < gridHeight) {
-				grid[1] += 1;
-			} else if (this.position.x < gridWidth && this.position.y >= gridHeight) {
-				grid[2] += 1;
-			} else if (this.position.x >= gridWidth && this.position.y >= gridHeight) {
-				grid[3] += 1;
+		firstLoop:
+		for(var y = 1; y <= gridSize; y++){
+			for (var x = 1; x <= gridSize; x++) {
+				if(this.position.x < (gridWidth * x) && this.position.y < (gridHeight*y)){
+					this.gameArea.grid[counter]++;
+					break firstLoop;
+				}
+				counter++;
 			}
+		}
 	}
 
 	checkWallCollision() {

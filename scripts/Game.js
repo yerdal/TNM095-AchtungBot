@@ -15,29 +15,27 @@ class Game {
 		this.player = new Player(3, 3, "blue", 10, 120, this, false);
 		this.enemy = new Bot(3, 3, "red", 20, 120, this, true);
 		this.player.addListeners();
-		this.grid = [0, 0, 0, 0];
+		this.gridSize = 3;
+		this.grid = Array.apply(null, Array(this.gridSize * this.gridSize)).map(Number.prototype.valueOf,0);
 	}
 
 	start() {
 		this.interval = setInterval(this.updateGameArea.bind(this), 20);
 		this.player.nextHoleTimer();
-		this.enemy.nextHoleTimer();
+		//this.enemy.nextHoleTimer();
 	}
 
 	updateGameArea() {
 		this.player.moveAngle = 0;
 		//this.enemy.moveAngle = Math.random();
-		this.enemy.moveAngle = 0;
+		//this.enemy.moveAngle = 0;
 		/*if (this.keys && this.keys[LEFT_KEY]) {this.player.moveAngle = -4;}
 		if (this.keys && this.keys[RIGHT_KEY]) {this.player.moveAngle = 4;}*/
 		this.player.newPos();
-		this.player.update(this.grid);
-		this.enemy.newPos();
-		this.enemy.update(this.grid);
-		console.log("grid1: " + this.grid[0]);
-		console.log("grid2: " + this.grid[1]);
-		console.log("grid3: " + this.grid[2]);
-		console.log("grid4: " + this.grid[3]);
+		this.player.update();
+		//this.enemy.newPos();
+		//this.enemy.update();
+		console.log(this.grid);
 
 	}
 }
