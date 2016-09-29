@@ -15,10 +15,14 @@ class Game {
 		this.player = new Player(3, 3, "blue", 50, 120, this, false);
 		this.enemy = new Bot(3, 3, "red", 20, 120, this, true);
 		this.player.addListeners();
+		this.gridSize = 3;
+		this.grid = Array.apply(null, Array(this.gridSize * this.gridSize)).map(Number.prototype.valueOf,0);
 	}
 
 	start() {
 		this.interval = setInterval(this.updateGameArea.bind(this), 20);
+		this.player.nextHoleTimer();
+		//this.enemy.nextHoleTimer();
 	}
 
 	updateGameArea() {

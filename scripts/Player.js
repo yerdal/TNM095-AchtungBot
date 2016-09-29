@@ -15,7 +15,9 @@ class Player {
 		this.color = color;
 		this.addListeners();
 		this.ctx = this.gameArea.context;
-		this.i = 1;
+		this.hole = 0;
+		this.holeID;
+
 		this.position = {
 		    x: x,
 		    y: y
@@ -23,12 +25,31 @@ class Player {
 	}
 
 	update() {
-		this.ctx.save();
-		this.ctx.translate(this.position.x, this.position.y);
-		this.ctx.rotate(this.angle);
-		this.ctx.fillStyle = this.color;
-		this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
-		this.ctx.restore();
+
+		if(this.hole == 0) {
+			this.ctx.save();
+			this.ctx.translate(this.position.x, this.position.y);
+			this.ctx.rotate(this.angle);
+		  	this.ctx.fillStyle = this.color;
+			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
+			this.ctx.restore();
+
+		} else {
+			this.hole--;
+
+			if(this.hole == 0) {
+				this.nextHoleTimer();
+			}
+		}
+	}
+
+	nextHoleTimer() {
+		var _this = this;
+		var time = 4 + Math.random() * 2;
+
+		this.holeID = setTimeout(function() {
+			_this.hole = 10;
+		},time*1000);
 	}
 
 	newPos() {
@@ -40,7 +61,6 @@ class Player {
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 
-	    this.i++;
 	    this.checkCollisions();
 	    this.update();
 	}
@@ -57,6 +77,26 @@ class Player {
 	checkCollisions() {
 		this.checkWallCollision();
 		this.checkWormCollision();
+		this.updateGrid();
+	}
+
+	updateGrid(){
+		//var grid = this.gameArea.grid;
+		var gridSize = this.gameArea.gridSize;
+		var gridWidth = this.gameArea.canvas.width / gridSize;
+		var gridHeight = this.gameArea.canvas.height / gridSize;
+		var counter = 0;
+
+		firstLoop:
+		for(var y = 1; y <= gridSize; y++){
+			for (var x = 1; x <= gridSize; x++) {
+				if(this.position.x < (gridWidth * x) && this.position.y < (gridHeight*y)){
+					this.gameArea.grid[counter]++;
+					break firstLoop;
+				}
+				counter++;
+			}
+		}
 	}
 
 	checkWallCollision() {
