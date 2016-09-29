@@ -1,2 +1,2 @@
 # TNM095-AchtungBot
-A Ai-bot for the game "Achtung die kurve".
+An Ai-bot for the game "Achtung die kurve".
