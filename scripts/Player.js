@@ -24,7 +24,7 @@ class Player {
 		};
 	}
 
-	update() {
+	update(grid) {
 		if(this.hole == 0) {
 			this.ctx.save();
 			this.ctx.translate(this.position.x, this.position.y);
@@ -32,6 +32,16 @@ class Player {
 		  this.ctx.fillStyle = this.color;
 			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 			this.ctx.restore();
+
+			if (this.position.x < this.gameArea.canvas.width/2 && this.position.y < this.gameArea.canvas.height/2) {
+				grid[0] += 1;
+			} else if (this.position.x >= this.gameArea.canvas.width/2 && this.position.y < this.gameArea.canvas.height/2) {
+				grid[1] += 1;
+			} else if (this.position.x < this.gameArea.canvas.width/2 && this.position.y >= this.gameArea.canvas.height/2) {
+				grid[2] += 1;
+			} else if (this.position.x >= this.gameArea.canvas.width/2 && this.position.y >= this.gameArea.canvas.height/2) {
+				grid[3] += 1;
+			}
 		} else {
 			this.hole--;
 
@@ -43,7 +53,7 @@ class Player {
 
 	nextHoleTimer() {
 		var _this = this;
-		var time = 2 + Math.random() * 3;
+		var time = 4 + Math.random() * 2;
 
 		this.holeID = setTimeout(function() {
 			_this.hole = 10;
