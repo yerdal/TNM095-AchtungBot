@@ -22,13 +22,25 @@ class Game {
 	start() {
 		this.interval = setInterval(this.updateGameArea.bind(this), 20);
 		this.player.nextHoleTimer();
-		//this.enemy.nextHoleTimer();
+		this.enemy.nextHoleTimer();
+	}
+	restart() {
+
 	}
 
 	updateGameArea() {
-		this.player.moveAngle = 0;
-		this.player.newPos();
-		this.enemy.newPos();
+
+		if (this.player.isDead || this.enemy.isDead) {
+			this.player = null;
+			this.enemy = null;
+			this.interval = null;
+		}
+		else {
+			this.player.moveAngle = 0;
+			this.player.newPos();
+			this.enemy.newPos();
+
+		}
 	}
 }
 module.exports = Game;

@@ -17,7 +17,7 @@ class Player {
 		this.ctx = this.gameArea.context;
 		this.hole = 0;
 		this.holeID;
-
+		this.isDead = false;
 		this.position = {
 		    x: x,
 		    y: y
@@ -119,7 +119,7 @@ class Player {
 		var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
 		for (var i = 0; i < pixelColors.data.length; i++) {
 			if (pixelColors.data[i] != 0) {
-				//console.log("Hit!");
+				this.isDead = true;
 			}
 		}
 	}
