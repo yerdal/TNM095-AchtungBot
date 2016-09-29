@@ -24,24 +24,15 @@ class Player {
 		};
 	}
 
-	update(grid) {
+	update() {
 		if(this.hole == 0) {
 			this.ctx.save();
 			this.ctx.translate(this.position.x, this.position.y);
 			this.ctx.rotate(this.angle);
-		  this.ctx.fillStyle = this.color;
+		  	this.ctx.fillStyle = this.color;
 			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 			this.ctx.restore();
 
-			if (this.position.x < this.gameArea.canvas.width/2 && this.position.y < this.gameArea.canvas.height/2) {
-				grid[0] += 1;
-			} else if (this.position.x >= this.gameArea.canvas.width/2 && this.position.y < this.gameArea.canvas.height/2) {
-				grid[1] += 1;
-			} else if (this.position.x < this.gameArea.canvas.width/2 && this.position.y >= this.gameArea.canvas.height/2) {
-				grid[2] += 1;
-			} else if (this.position.x >= this.gameArea.canvas.width/2 && this.position.y >= this.gameArea.canvas.height/2) {
-				grid[3] += 1;
-			}
 		} else {
 			this.hole--;
 
@@ -59,8 +50,6 @@ class Player {
 			_this.hole = 10;
 		},time*1000);
 	}
-
-
 
 	newPos() {
 		if (this.keys && this.keys[LEFT_KEY]) {this.moveAngle = -4;}
@@ -85,6 +74,23 @@ class Player {
 	checkCollisions() {
 		this.checkWallCollision();
 		this.checkWormCollision();
+		this.updateGrid();
+	}
+
+	updateGrid(){
+		var grid = this.gameArea.grid;
+		var gridWidth = this.gameArea.canvas.height / 2;
+		var gridHeight = this.gameArea.canvas.height/ 2;
+
+		if (this.position.x < gridWidth && this.position.y < gridHeight) {
+				grid[0] += 1;
+			} else if (this.position.x >= gridWidth && this.position.y < gridHeight) {
+				grid[1] += 1;
+			} else if (this.position.x < gridWidth && this.position.y >= gridHeight) {
+				grid[2] += 1;
+			} else if (this.position.x >= gridWidth && this.position.y >= gridHeight) {
+				grid[3] += 1;
+			}
 	}
 
 	checkWallCollision() {
