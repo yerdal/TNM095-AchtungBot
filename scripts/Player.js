@@ -57,7 +57,6 @@ class Player {
 		if (this.keys && this.keys[RIGHT_KEY]) {this.moveAngle = 4;}
 		var newAngle = this.moveAngle * Math.PI / 180; 
 		this.angle += this.moveAngle * Math.PI / 180;
-
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 

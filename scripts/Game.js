@@ -27,7 +27,6 @@ class Game {
 
 	updateGameArea() {
 		this.player.moveAngle = 0;
-		this.enemy.moveAngle = 0;
 		this.player.newPos();
 		this.enemy.newPos();
 	}

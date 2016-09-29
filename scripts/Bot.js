@@ -12,41 +12,42 @@ class Bot extends Player {
 		var m = position.y - k*position.x;*/
 		for (var i = 0; i < pixelColors.data.length; i++) {
 			if (pixelColors.data[i] != 0) {
-				if (Math.round(k) != 1 ) {
 					this.moveAngle = 4;
 					this.obstacle = pixelColors;
-				}
-				else
-				{
-					this.moveAngle = 0;
-					this.obstacle = {};
-				}
+			}	
+			else {
+				this.moveAngle = 0;
+				this.obstacle = {};
+				console.log("hejs");
 			}
+			
 		}
 	}
 
 	newPos() {
-		// obstacle already detected
-			var x1, x2, y1, y2;
-			y1 = this.position.y;
-			x1 = this.position.x;
-		    x2 = this.position.x + this.speed * Math.sin(this.angle);
-		    y2 = this.position.y - this.speed * Math.cos(this.angle);
-		    var k = (y2-y1)/(x2-x1);
-		    console.log(k);
-		if (!_.isEmpty(this.obstacle)) {
-			this.decide(this.obstacle, k);
-		}
-		// check if new obstacle
-		else
-		{
-			var pixelColors = this.ctx.getImageData(this.position.x, this.position.y-60, 1, 1);
-			this.decide(pixelColors, k);
-		}
+		var x1, x2, y1, y2;
 	   	var newAngle = this.moveAngle * Math.PI / 180; 
 	   	this.angle += this.moveAngle * Math.PI / 180;
+	   	y1 = this.position.y;
+	   	x1 = this.position.x;
 	   	this.position.x += this.speed * Math.sin(this.angle);
 	   	this.position.y -= this.speed * Math.cos(this.angle);
+	   	x2 = this.position.x;
+	   	y2 = this.position.y;
+	   	var k = (y2-y1)/(x2-x1);
+
+	   	// obstacle already detected
+	   	if (!_.isEmpty(this.obstacle)) {
+	   		this.decide(this.obstacle, k);
+	   	}
+	   	// check if new obstacle
+	   	else {
+	   		var newPos = {};
+	   		newPos.x = this.position.x + Math.cos(Math.atan(k))*40;
+	   		newPos.y = this.position.y + Math.sin(Math.atan(k))*40;
+	   		var pixelColors = this.ctx.getImageData(newPos.x, newPos.y, 1, 1);
+	   		this.decide(pixelColors, k);
+	   	}
 	   	this.checkCollisions();
 	   	this.update();
 	}
