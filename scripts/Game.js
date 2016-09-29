@@ -12,7 +12,7 @@ class Game {
 		this.canvas.height = height;
 		this.context = this.canvas.getContext("2d");
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-		this.player = new Player(3, 3, "blue", 10, 120, this, false);
+		this.player = new Player(3, 3, "blue", 50, 120, this, false);
 		this.enemy = new Bot(3, 3, "red", 20, 120, this, true);
 		this.player.addListeners();
 	}
@@ -23,14 +23,9 @@ class Game {
 
 	updateGameArea() {
 		this.player.moveAngle = 0;
-		//this.enemy.moveAngle = Math.random();
 		this.enemy.moveAngle = 0;
-		/*if (this.keys && this.keys[LEFT_KEY]) {this.player.moveAngle = -4;}
-		if (this.keys && this.keys[RIGHT_KEY]) {this.player.moveAngle = 4;}*/
 		this.player.newPos();
-		this.player.update();
 		this.enemy.newPos();
-		this.enemy.update();
 	}
 }
 module.exports = Game;

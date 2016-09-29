@@ -15,7 +15,7 @@ class Player {
 		this.color = color;
 		this.addListeners();
 		this.ctx = this.gameArea.context;
-
+		this.i = 1;
 		this.position = {
 		    x: x,
 		    y: y
@@ -29,7 +29,6 @@ class Player {
 		this.ctx.fillStyle = this.color;
 		this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 		this.ctx.restore();
-
 	}
 
 	newPos() {
@@ -37,10 +36,13 @@ class Player {
 		if (this.keys && this.keys[RIGHT_KEY]) {this.moveAngle = 4;}
 		var newAngle = this.moveAngle * Math.PI / 180; 
 		this.angle += this.moveAngle * Math.PI / 180;
+
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 
+	    this.i++;
 	    this.checkCollisions();
+	    this.update();
 	}
 	addListeners() {
 		window.addEventListener('keydown', function (e) {
@@ -78,7 +80,7 @@ class Player {
 		var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
 		for (var i = 0; i < pixelColors.data.length; i++) {
 			if (pixelColors.data[i] != 0) {
-				console.log("Hit!");
+				//console.log("Hit!");
 			}
 		}
 	}
