@@ -15,6 +15,8 @@ class Player {
 		this.color = color;
 		this.addListeners();
 		this.ctx = this.gameArea.context;
+		this.hole = 0;
+		this.holeID;
 
 		this.position = {
 		    x: x,
@@ -23,14 +25,32 @@ class Player {
 	}
 
 	update() {
-		this.ctx.save();
-		this.ctx.translate(this.position.x, this.position.y);
-		this.ctx.rotate(this.angle);
-		this.ctx.fillStyle = this.color;
-		this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
-		this.ctx.restore();
+		if(this.hole == 0) {
+			this.ctx.save();
+			this.ctx.translate(this.position.x, this.position.y);
+			this.ctx.rotate(this.angle);
+		  this.ctx.fillStyle = this.color;
+			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
+			this.ctx.restore();
+		} else {
+			this.hole--;
 
+			if(this.hole == 0) {
+				this.nextHoleTimer();
+			}
+		}
 	}
+
+	nextHoleTimer() {
+		var _this = this;
+		var time = 2 + Math.random() * 3;
+
+		this.holeID = setTimeout(function() {
+			_this.hole = 10;
+		},time*1000);
+	}
+
+
 
 	newPos() {
 		if (this.keys && this.keys[LEFT_KEY]) {this.moveAngle = -4;}

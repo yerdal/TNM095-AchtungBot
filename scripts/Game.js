@@ -19,6 +19,8 @@ class Game {
 
 	start() {
 		this.interval = setInterval(this.updateGameArea.bind(this), 20);
+		this.player.nextHoleTimer();
+		this.enemy.nextHoleTimer();
 	}
 
 	updateGameArea() {
