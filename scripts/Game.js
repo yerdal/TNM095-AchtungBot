@@ -29,8 +29,8 @@ class Game {
 	}
 
 	updateGameArea() {
-
-		if (this.player.isDead || this.enemy.isDead) {
+		//
+		if (this.player.isDead || this.player.isDead) {
 			this.player = null;
 			this.enemy = null;
 			this.interval = null;

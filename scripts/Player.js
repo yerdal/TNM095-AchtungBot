@@ -1,4 +1,3 @@
-
 const UP_KEY = 38;
 const DOWN_KEY = 40;
 const RIGHT_KEY = 39;
@@ -27,6 +26,7 @@ class Player {
 	update() {
 
 		if(this.hole == 0) {
+			//console.log("angle", this.angle);
 			this.ctx.save();
 			this.ctx.translate(this.position.x, this.position.y);
 			this.ctx.rotate(this.angle);
@@ -60,9 +60,13 @@ class Player {
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 
+	    var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
+	    //console.log("NewPosPixel", pixelColors);
+
 	    this.checkCollisions();
 	    this.update();
 	}
+
 	addListeners() {
 		window.addEventListener('keydown', function (e) {
 		    this.keys = (this.keys || []);
@@ -101,9 +105,10 @@ class Player {
 	checkWallCollision() {
 		var canvasWidth = this.gameArea.canvas.width;
 		var canvasHeight = this.gameArea.canvas.height;
-		
+
 		if(this.position.x+this.width >= canvasWidth && this.position.x > canvasWidth){
 			this.position.x = 0;
+
 		}else if(this.position.x < 0){
 			this.position.x = canvasWidth;
 		}
@@ -118,8 +123,10 @@ class Player {
 	checkWormCollision() {
 
 		var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
+		//console.log("checkworm")
 		for (var i = 0; i < pixelColors.data.length; i++) {
 			if (pixelColors.data[i] != 0) {
+				console.log("testPixel",pixelColors.data[i]);
 				this.isDead = true;
 				console.log("hej");
 
