@@ -1,4 +1,4 @@
-var GridSection = require("./GridSection");
+let GridSection = require("./GridSection");
 class Grid {
 	constructor(gridSize, width, height) {
 		this.size = gridSize;
@@ -8,7 +8,7 @@ class Grid {
 		this.initGrid();
 	}
 	initGrid() {
-		for (var i = 0; i < this.size * this.size; i++) {
+		for (let i = 0; i < this.size * this.size; i++) {
 			this.sections.push(new GridSection());
 		}
 	}
@@ -40,14 +40,16 @@ class Grid {
 	}
 	getGridSectionWithLeastOccupation() {
 		var leastOccupiedGrid = this.sections[0];
-		for (var i = 0; i < this.sections.length; i++){
-			console.log(this.sections[i]);
+		let leastGridIndex = 0;
+
+		for (let i = 1; i < this.sections.length; i++){
 			if(this.sections[i].occupation < leastOccupiedGrid.occupation){
 				leastOccupiedGrid = this.sections[i];
-				//this.gridIndex = i;
+				leastGridIndex = i;
 			}
 		}
-		return leastOccupiedGrid;
+		//console.log("leastOccupiedGrid", leastGridIndex);
+		return leastGridIndex;
 	}
 	updateGridOccupation(position) {
 		var counter = 0;

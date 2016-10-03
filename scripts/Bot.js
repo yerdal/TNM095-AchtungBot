@@ -49,7 +49,7 @@ class Bot extends Player {
 	   	this.decide(pixelVec, k);
 	   	this.checkCollisions();
 	   	this.update();
-	   	console.log(this.gameArea.grid.getGridSectionWithLeastOccupation(this.position));
+	   	//console.log(this.gameArea.grid.getGridSectionWithLeastOccupation(this.position));
 	}
 	
 }
