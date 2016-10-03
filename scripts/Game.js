@@ -18,7 +18,6 @@ class Game {
 		this.player.addListeners();
 		this.gridSize = 3;
 		this.grid = new Grid(this.gridSize, this.canvas.width/this.gridSize, this.canvas.height/this.gridSize);
-		console.log(this.grid);
 	}
 
 	start() {

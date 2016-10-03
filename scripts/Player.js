@@ -79,29 +79,10 @@ class Player {
 	checkCollisions() {
 		this.checkWallCollision();
 		this.checkWormCollision();
-		this.updateGrid();
+		this.gameArea.grid.updateGridOccupation(this.position);
 	}
 
-	updateGrid(){
-		//var grid = this.gameArea.grid;
-		var gridSize = this.gameArea.gridSize;
-		var gridWidth = this.gameArea.canvas.width / gridSize;
-		var gridHeight = this.gameArea.canvas.height / gridSize;
-		var counter = 0;
-
-		firstLoop:
-		for(var y = 1; y <= gridSize; y++){
-			for (var x = 1; x <= gridSize; x++) {
-				if(this.position.x < (gridWidth * x) && this.position.y < (gridHeight*y)){
-					// add occupation for grid
-					this.gameArea.grid.sections[counter].occupation++;
-					break firstLoop;
-				}
-				counter++;
-			}
-		}
-	}
-
+	
 	checkWallCollision() {
 		var canvasWidth = this.gameArea.canvas.width;
 		var canvasHeight = this.gameArea.canvas.height;
