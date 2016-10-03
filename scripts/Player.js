@@ -26,7 +26,6 @@ class Player {
 	update() {
 
 		if(this.hole == 0) {
-			//console.log("angle", this.angle);
 			this.ctx.save();
 			this.ctx.translate(this.position.x, this.position.y);
 			this.ctx.rotate(this.angle);
@@ -94,7 +93,8 @@ class Player {
 		for(var y = 1; y <= gridSize; y++){
 			for (var x = 1; x <= gridSize; x++) {
 				if(this.position.x < (gridWidth * x) && this.position.y < (gridHeight*y)){
-					this.gameArea.grid[counter]++;
+					// add occupation for grid
+					this.gameArea.grid.sections[counter].occupation++;
 					break firstLoop;
 				}
 				counter++;
@@ -106,16 +106,16 @@ class Player {
 		var canvasWidth = this.gameArea.canvas.width;
 		var canvasHeight = this.gameArea.canvas.height;
 
-		if(this.position.x+this.width >= canvasWidth && this.position.x > canvasWidth){
+		if (this.position.x+this.width >= canvasWidth && this.position.x > canvasWidth) {
 			this.position.x = 0;
 
-		}else if(this.position.x < 0){
+		} else if(this.position.x < 0) {
 			this.position.x = canvasWidth;
 		}
-		if(this.position.y+this.height > canvasHeight && this.position.y > canvasHeight){
+		if (this.position.y+this.height > canvasHeight && this.position.y > canvasHeight){
 			this.position.y = 0;
 		
-		}else if(this.position.y < 0){
+		} else if(this.position.y < 0) {
 			this.position.y = canvasHeight;
 		}
 	}
@@ -123,7 +123,6 @@ class Player {
 	checkWormCollision() {
 
 		var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
-		//console.log("checkworm")
 		for (var i = 0; i < pixelColors.data.length; i++) {
 			if (pixelColors.data[i] != 0) {
 				console.log("testPixel",pixelColors.data[i]);
