@@ -116,10 +116,13 @@ class Player {
 	}
 
 	checkWormCollision() {
+
 		var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
 		for (var i = 0; i < pixelColors.data.length; i++) {
 			if (pixelColors.data[i] != 0) {
 				this.isDead = true;
+				console.log("hej");
+
 			}
 		}
 	}
