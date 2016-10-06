@@ -18,6 +18,7 @@
   "homepage": "https://github.com/yerdal/TNM095-AchtungBot#readme",
   "dependencies": {
     "browserify": "^13.1.0",
+    "js-priority-queue": "^0.1.5",
     "underscore": "^1.8.3"
   }
 }

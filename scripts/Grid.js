@@ -9,7 +9,6 @@ class Grid {
 	}
 	initGrid() {
 		for (let i = 0; i < this.size * this.size; i++) {
-
 			this.sections.push(new GridSection());
 
 		}
@@ -25,7 +24,7 @@ class Grid {
 		}
 	}
 	getGridSection(index) {
-		return this.grid[index];
+		return this.sections[index];
 	}
 	getCurrentGridSection(position) {
 		//While getting the current grid index we update the 
