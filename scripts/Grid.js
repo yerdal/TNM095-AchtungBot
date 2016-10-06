@@ -41,7 +41,6 @@ class Grid {
 	getGridSectionWithLeastOccupation() {
 		var leastOccupiedGrid = this.sections[0];
 		for (var i = 0; i < this.sections.length; i++){
-			console.log(this.sections[i]);
 			if(this.sections[i].occupation < leastOccupiedGrid.occupation){
 				leastOccupiedGrid = this.sections[i];
 				//this.gridIndex = i;

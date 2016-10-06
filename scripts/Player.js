@@ -60,7 +60,6 @@ class Player {
 	    this.position.y -= this.speed * Math.cos(this.angle);
 
 	    var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
-	    //console.log("NewPosPixel", pixelColors);
 
 	    this.checkCollisions();
 	    this.update();
@@ -106,10 +105,7 @@ class Player {
 		var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
 		for (var i = 0; i < pixelColors.data.length; i++) {
 			if (pixelColors.data[i] != 0) {
-				console.log("testPixel",pixelColors.data[i]);
 				this.isDead = true;
-				console.log("hej");
-
 			}
 		}
 	}
