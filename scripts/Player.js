@@ -63,7 +63,6 @@ class Player {
 	    this.position.y -= this.speed * Math.cos(this.angle);
 
 	    var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
-	    this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
 	    this.checkCollisions();
 	    this.update();
 	}
