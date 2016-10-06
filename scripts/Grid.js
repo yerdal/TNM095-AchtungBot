@@ -10,7 +10,6 @@ class Grid {
 	initGrid() {
 		for (let i = 0; i < this.size * this.size; i++) {
 			this.sections.push(new GridSection());
-
 		}
 
 		let counter = 0;
@@ -47,14 +46,21 @@ class Grid {
 	}
 	getGridSectionWithLeastOccupation() {
 		var leastOccupiedGrid = this.sections[0];
-		let leastGridIndex = 0;
+		let gridSectionWithLeastOccupation={
+			centerX: 0,
+			centerY: 0,
+			index: -1
+		};
+
 		for (let i = 1; i < this.sections.length; i++){
 			if(this.sections[i].occupation < leastOccupiedGrid.occupation){
 				leastOccupiedGrid = this.sections[i];
-				leastGridIndex = i;
+				gridSectionWithLeastOccupation.centerX = this.sections[i].centerX;
+				gridSectionWithLeastOccupation.centerY = this.sections[i].centerY;
+				gridSectionWithLeastOccupation.index = i;
 			}
 		}
-		return leastGridIndex;
+		return gridSectionWithLeastOccupation;
 	}
 }
 
