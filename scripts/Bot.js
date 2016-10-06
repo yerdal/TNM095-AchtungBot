@@ -7,7 +7,7 @@ class Bot extends Player {
 
 		this.gridIndex = 0;
 		this.currentGrid = 0;
-		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position));
+		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index);
 
 	}
 
@@ -16,7 +16,6 @@ class Bot extends Player {
 		for (var i = 0; i < pixelVec.length; i++) {
 			if (pixelVec[i] != 0) {
 					this.moveAngle = 4;
-					console.log("hej");
 					white = false;
 					break;
 			}
@@ -40,7 +39,6 @@ class Bot extends Player {
 	   	x2 = this.position.x;
 	   	y2 = this.position.y;
 	   	var k = (y2-y1)/(x2-x1);
-	   	// console.log(Math.atan(k));
 
 	   	var pixelVec = [];
 	   	// check if new obstacle
@@ -53,9 +51,11 @@ class Bot extends Player {
 	   		pixelVec.push(pixelColors);
 	   	}
 	   	this.decide(pixelVec, k);
+	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
+	   	this.currentGridSection.occupation++;
+	   	this.pathFinding.run(this.currentGridSection);
 	   	this.checkCollisions();
 	   	this.update();
-
 	}
 	
 }

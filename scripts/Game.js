@@ -30,7 +30,6 @@ class Game {
 	}
 
 	updateGameArea() {
-		
 		if (this.player.isDead || this.player.isDead) {
 			this.player = null;
 			this.enemy = null;
@@ -40,7 +39,6 @@ class Game {
 			this.player.moveAngle = 0;
 			this.player.newPos();
 			this.enemy.newPos();
-
 		}
 	}
 }

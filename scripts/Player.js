@@ -19,6 +19,7 @@ class Player {
 		this.hole = 0;
 		this.holeID;
 		this.isDead = false;
+		this.currentGridSection = -1;
 		this.position = {
 		    x: x,
 		    y: y
@@ -62,7 +63,7 @@ class Player {
 	    this.position.y -= this.speed * Math.cos(this.angle);
 
 	    var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
-
+	    this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
 	    this.checkCollisions();
 	    this.update();
 	}
@@ -80,7 +81,7 @@ class Player {
 	checkCollisions() {
 		this.checkWallCollision();
 		this.checkWormCollision();
-		this.gameArea.grid.getCurrentGridSection(this.position);
+		//this.gameArea.grid.getCurrentGridSection(this.position);
 
 	}
 
