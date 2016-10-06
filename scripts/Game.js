@@ -1,5 +1,6 @@
 var Player = require("./Player");
 var Bot = require("./Bot");
+var Grid = require("./Grid");
 const UP_KEY = 38;
 const DOWN_KEY = 40;
 const RIGHT_KEY = 39;
@@ -12,11 +13,11 @@ class Game {
 		this.canvas.height = height;
 		this.context = this.canvas.getContext("2d");
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-		this.player = new Player(3, 3, "blue", 150, 120, this, false);
-		this.enemy = new Bot(3, 3, "red", 120, 120, this, true);
+		this.player = new Player(3, 3, "blue", 50, 120, this);
+		this.enemy = new Bot(3, 3, "red", 20, 120, this);
 		this.player.addListeners();
 		this.gridSize = 3;
-		this.grid = Array.apply(null, Array(this.gridSize * this.gridSize)).map(Number.prototype.valueOf,0);
+		this.grid = new Grid(this.gridSize, this.canvas.width/this.gridSize, this.canvas.height/this.gridSize);
 	}
 
 	start() {
@@ -29,8 +30,8 @@ class Game {
 	}
 
 	updateGameArea() {
-
-		if (this.player.isDead || this.enemy.isDead) {
+		
+		if (this.player.isDead || this.player.isDead) {
 			this.player = null;
 			this.enemy = null;
 			this.interval = null;

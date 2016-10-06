@@ -61,9 +61,12 @@ class Player {
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 
+	    var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
+
 	    this.checkCollisions();
 	    this.update();
 	}
+
 	addListeners() {
 		window.addEventListener('keydown', function (e) {
 		    this.keys = (this.keys || []);
@@ -77,41 +80,26 @@ class Player {
 	checkCollisions() {
 		this.checkWallCollision();
 		this.checkWormCollision();
-		this.updateGrid();
+		this.gameArea.grid.updateGridOccupation(this.position);
+		//this.gameArea.grid.getCurrentGridSection(this.position);
+		//this.gameArea.grid.getGridSectionWithLeastOccupation();
 	}
 
-	updateGrid(){
-		//var grid = this.gameArea.grid;
-		var gridSize = this.gameArea.gridSize;
-		var gridWidth = this.gameArea.canvas.width / gridSize;
-		var gridHeight = this.gameArea.canvas.height / gridSize;
-		var counter = 0;
-
-		firstLoop:
-		for(var y = 1; y <= gridSize; y++){
-			for (var x = 1; x <= gridSize; x++) {
-				if(this.position.x < (gridWidth * x) && this.position.y < (gridHeight*y)){
-					this.gameArea.grid[counter]++;
-					break firstLoop;
-				}
-				counter++;
-			}
-		}
-	}
-
+	
 	checkWallCollision() {
 		var canvasWidth = this.gameArea.canvas.width;
 		var canvasHeight = this.gameArea.canvas.height;
-		
-		if(this.position.x+this.width >= canvasWidth && this.position.x > canvasWidth){
+
+		if (this.position.x+this.width >= canvasWidth && this.position.x > canvasWidth) {
 			this.position.x = 0;
-		}else if(this.position.x < 0){
+
+		} else if(this.position.x < 0) {
 			this.position.x = canvasWidth;
 		}
-		if(this.position.y+this.height > canvasHeight && this.position.y > canvasHeight){
+		if (this.position.y+this.height > canvasHeight && this.position.y > canvasHeight){
 			this.position.y = 0;
 		
-		}else if(this.position.y < 0){
+		} else if(this.position.y < 0) {
 			this.position.y = canvasHeight;
 		}
 	}

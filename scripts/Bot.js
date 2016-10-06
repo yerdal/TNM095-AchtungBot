@@ -4,14 +4,11 @@ class Bot extends Player {
 	constructor(width, height, color, x, y, gameArea) {
 		super(width, height, color, x, y, gameArea);
 
-		// this.detector =	this.ctx.fillRect(this.position.x, this.position.y, 1, 50);
-		// this.detector.rotate(this.angle);
-		// this.obstacle = {};
+		this.gridIndex = 0;
+		this.currentGrid = 0;
 	}
 
 	decide(pixelVec, k) {
-		/*var k = position.y/position.x;
-		var m = position.y - k*position.x;*/
 		var white = true;
 		for (var i = 0; i < pixelVec.length; i++) {
 			if (pixelVec[i] != 0) {
@@ -53,8 +50,6 @@ class Bot extends Player {
 	   		pixelVec.push(pixelColors);
 	   	}
 	   	this.decide(pixelVec, k);
-	   	
-
 	   	this.checkCollisions();
 	   	this.update();
 	}
