@@ -1,6 +1,6 @@
 var Player = require("./Player");
 var _ = require("underscore");
-var PathFinding = require("./Pathfinding");
+var PathFinding = require("./PathFinding");
 class Bot extends Player {
 	constructor(width, height, color, x, y, gameArea) {
 		super(width, height, color, x, y, gameArea);
