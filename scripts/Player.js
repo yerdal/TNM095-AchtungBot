@@ -81,6 +81,7 @@ class Player {
 		this.checkWallCollision();
 		this.checkWormCollision();
 		this.gameArea.grid.getCurrentGridSection(this.position);
+
 	}
 
 	
