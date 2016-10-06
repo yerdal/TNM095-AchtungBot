@@ -1,3 +1,5 @@
+var _ = require("underscore");
+
 const UP_KEY = 38;
 const DOWN_KEY = 40;
 const RIGHT_KEY = 39;
@@ -78,9 +80,7 @@ class Player {
 	checkCollisions() {
 		this.checkWallCollision();
 		this.checkWormCollision();
-		this.gameArea.grid.updateGridOccupation(this.position);
-		//this.gameArea.grid.getCurrentGridSection(this.position);
-		//this.gameArea.grid.getGridSectionWithLeastOccupation();
+		this.gameArea.grid.getCurrentGridSection(this.position);
 	}
 
 	
@@ -103,12 +103,9 @@ class Player {
 	}
 
 	checkWormCollision() {
-
-		var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
-		for (var i = 0; i < pixelColors.data.length; i++) {
-			if (pixelColors.data[i] != 0) {
-				this.isDead = true;
-			}
+	  var pixelColors = _.reduce(this.ctx.getImageData(this.position.x, this.position.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
+		if (pixelColors != 0) {
+			this.isDead = true;
 		}
 	}
 

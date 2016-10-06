@@ -2,7 +2,6 @@ const TURN_RIGHT = 4;
 const TURN_LEFT = -4;
 class BehaviourTree {
 	constructor (){
-
 	}
 	getBehaviour(currentGrid, gridWithLeastPoints) {
 		switch(currentGrid) {

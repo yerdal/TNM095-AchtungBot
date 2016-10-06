@@ -9,48 +9,28 @@ class Grid {
 	}
 	initGrid() {
 		for (let i = 0; i < this.size * this.size; i++) {
+
 			this.sections.push(new GridSection());
+
+		}
+
+		let counter = 0;
+		for(var y = 1; y <= this.size; y++){
+			for (var x = 1; x <= this.size; x++) {
+					// Calculate center positions for grid 0-8
+					this.sections[counter].centerX = (this.width*x) / 2
+					this.sections[counter].centerY = (this.height*y) / 2;
+					counter++
+			}
 		}
 	}
 	getGridSection(index) {
 		return this.grid[index];
 	}
 	getCurrentGridSection(position) {
+		//While getting the current grid index we update the 
+		//occupations on the grid.
 		var index = -1;
-		if(position.x <= this.width && position.y <= this.height){
-			index = 0;
-		}else if(position.x <= this.width*2 && position.y <= this.height){
-			index = 1;
-		}else if(position.x <= this.width*3 && position.y <= this.height){
-			index = 2;
-		}else if(position.x <= this.width && position.y <= this.height*2){
-			index = 3;
-		}else if(position.x <= this.width*2 && position.y <= this.height*2){
-			index = 4;
-		}else if(position.x <= this.width*3 && position.y <= this.height*2){
-			index = 5;
-		}else if(position.x <= this.width*1 && position.y <= this.height*3){
-			index = 6;
-		}else if(position.x <= this.width*2 && position.y <= this.height*3){
-			index = 7;
-		}else if(position.x <= this.width*3 && position.y <= this.height*3){
-			index = 8;
-		}
-		return index;
-	}
-	getGridSectionWithLeastOccupation() {
-		var leastOccupiedGrid = this.sections[0];
-		let leastGridIndex = 0;
-
-		for (let i = 1; i < this.sections.length; i++){
-			if(this.sections[i].occupation < leastOccupiedGrid.occupation){
-				leastOccupiedGrid = this.sections[i];
-				leastGridIndex = i;
-			}
-		}
-		return leastGridIndex;
-	}
-	updateGridOccupation(position) {
 		var counter = 0;
 		firstLoop:
 		for(var y = 1; y <= this.size; y++){
@@ -58,11 +38,24 @@ class Grid {
 				if(position.x < (this.width * x) && position.y < (this.height*y)){
 					// add occupation for grid
 					this.sections[counter].occupation++;
+					index = counter;
 					break firstLoop;
 				}
 				counter++;
 			}
 		}
+		return index;
+	}
+	getGridSectionWithLeastOccupation() {
+		var leastOccupiedGrid = this.sections[0];
+		let leastGridIndex = 0;
+		for (let i = 1; i < this.sections.length; i++){
+			if(this.sections[i].occupation < leastOccupiedGrid.occupation){
+				leastOccupiedGrid = this.sections[i];
+				leastGridIndex = i;
+			}
+		}
+		return leastGridIndex;
 	}
 }
 
