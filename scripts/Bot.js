@@ -13,7 +13,6 @@ class Bot extends Player {
 		for (var i = 0; i < pixelVec.length; i++) {
 			for (var j = 0; j < pixelVec[i].data.length; j++) {
 				if (pixelVec[i].data[j] != 0) {
-
 						this.moveAngle = 10;
 						white = false;
 						break;
@@ -49,6 +48,7 @@ class Bot extends Player {
 	   	this.decide(pixelVec, k);
 	   	this.checkCollisions();
 	   	this.update();
+	   	
 	   	//console.log(this.gameArea.grid.getGridSectionWithLeastOccupation(this.position));
 	}
 	
