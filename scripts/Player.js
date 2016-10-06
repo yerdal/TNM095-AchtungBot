@@ -79,6 +79,8 @@ class Player {
 		this.checkWallCollision();
 		this.checkWormCollision();
 		this.gameArea.grid.updateGridOccupation(this.position);
+		//this.gameArea.grid.getCurrentGridSection(this.position);
+		//this.gameArea.grid.getGridSectionWithLeastOccupation();
 	}
 
 	
