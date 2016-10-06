@@ -11,7 +11,7 @@ class Player {
 		this.width = width;
 		this.height = height;
 		this.speed = 2;
-		this.angle = 0;
+		this.angle = Math.floor(Math.random() * 361);
 		this.moveAngle = 0;
 		this.color = color;
 		this.addListeners();
