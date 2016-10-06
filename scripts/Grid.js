@@ -72,7 +72,6 @@ class Grid {
 				leastGridIndex = i;
 			}
 		}
-		//console.log("leastOccupiedGrid", leastGridIndex);
 		return leastGridIndex;
 	}
 	/*updateGridOccupation(position) {
