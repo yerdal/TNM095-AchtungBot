@@ -12,8 +12,8 @@ class Game {
 		this.canvas.height = height;
 		this.context = this.canvas.getContext("2d");
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-		this.player = new Player(3, 3, "blue", 50, 120, this, false);
-		this.enemy = new Bot(3, 3, "red", 20, 120, this, true);
+		this.player = new Player(3, 3, "blue", 150, 120, this, false);
+		this.enemy = new Bot(3, 3, "red", 120, 120, this, true);
 		this.player.addListeners();
 		this.gridSize = 3;
 		this.grid = Array.apply(null, Array(this.gridSize * this.gridSize)).map(Number.prototype.valueOf,0);
