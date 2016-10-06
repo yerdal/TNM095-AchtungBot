@@ -1,11 +1,14 @@
 var Player = require("./Player");
 var _ = require("underscore");
+var PathFinding = require("./Pathfinding");
 class Bot extends Player {
 	constructor(width, height, color, x, y, gameArea) {
 		super(width, height, color, x, y, gameArea);
 		this.obstacle = {};
 		this.gridIndex = 0;
 		this.currentGrid = 0;
+		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position));
+
 	}
 
 	decide(pixelVec, k) {
@@ -13,7 +16,6 @@ class Bot extends Player {
 		for (var i = 0; i < pixelVec.length; i++) {
 			for (var j = 0; j < pixelVec[i].data.length; j++) {
 				if (pixelVec[i].data[j] != 0) {
-
 						this.moveAngle = 10;
 						white = false;
 						break;

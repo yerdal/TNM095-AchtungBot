@@ -13,11 +13,11 @@ class Game {
 		this.canvas.height = height;
 		this.context = this.canvas.getContext("2d");
 		document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+		this.gridSize = 3;
+		this.grid = new Grid(this.gridSize, this.canvas.width/this.gridSize, this.canvas.height/this.gridSize);
 		this.player = new Player(3, 3, "blue", 50, 120, this);
 		this.enemy = new Bot(3, 3, "red", 20, 120, this);
 		this.player.addListeners();
-		this.gridSize = 3;
-		this.grid = new Grid(this.gridSize, this.canvas.width/this.gridSize, this.canvas.height/this.gridSize);
 	}
 
 	start() {
