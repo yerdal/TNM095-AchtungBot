@@ -4,16 +4,11 @@ class GridSection {
 		this.centerX = 0;
 		this.centerY = 0;
 		this.g = 0;
-		this.h = 0;
-	}
-	setG () {
-		this.g++;
-	}
-	setH(val) {
-		h = val;
+		this.h = -1;
+		this.index = -1;
 	}
 	getF () {
-		return this.g + this.h;
+		this.g + this.h;
 	}
 	getG() {
 		return this.g;

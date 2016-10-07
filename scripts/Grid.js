@@ -16,8 +16,9 @@ class Grid {
 		for(var y = 1; y <= this.size; y++){
 			for (var x = 1; x <= this.size; x++) {
 					// Calculate center positions for grid 0-8
-					this.sections[counter].centerX = (this.width*x) / 2
+					this.sections[counter].centerX = (this.width*x) / 2;
 					this.sections[counter].centerY = (this.height*y) / 2;
+					this.sections[counter].index = counter;
 					counter++
 			}
 		}
@@ -34,33 +35,23 @@ class Grid {
 		for(var y = 1; y <= this.size; y++){
 			for (var x = 1; x <= this.size; x++) {
 				if(position.x < (this.width * x) && position.y < (this.height*y)){
-					// add occupation for grid
-					this.sections[counter].occupation++;
 					index = counter;
 					break firstLoop;
 				}
 				counter++;
 			}
 		}
-		return index;
+		return this.sections[index];
 	}
 	getGridSectionWithLeastOccupation() {
 		var leastOccupiedGrid = this.sections[0];
-		let gridSectionWithLeastOccupation={
-			centerX: 0,
-			centerY: 0,
-			index: -1
-		};
 
 		for (let i = 1; i < this.sections.length; i++){
-			if(this.sections[i].occupation < leastOccupiedGrid.occupation){
+			if(this.sections[i].occupation < leastOccupiedGrid.occupation) {
 				leastOccupiedGrid = this.sections[i];
-				gridSectionWithLeastOccupation.centerX = this.sections[i].centerX;
-				gridSectionWithLeastOccupation.centerY = this.sections[i].centerY;
-				gridSectionWithLeastOccupation.index = i;
 			}
 		}
-		return gridSectionWithLeastOccupation;
+		return leastOccupiedGrid;
 	}
 }
 

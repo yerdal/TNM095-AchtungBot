@@ -27,30 +27,29 @@ class Game {
 	}
 
 	updateGameArea() {
-		
 		if (this.player.isDead || this.enemy.isDead) {
 			var _this = this;
 			this.context.beginPath();
 			var xPos = (this.canvas.width/2)-100;
 			var yPos = (this.canvas.height/2)-50;
-	    this.context.rect(xPos, yPos, 200, 100); 
-	    this.context.fillStyle = '#FFFFFF'; 
-	    this.context.fillStyle = 'rgba(225,225,225,0.5)';
-	    this.context.fill();
-	    this.context.lineWidth = 2;
-	    this.context.strokeStyle = '#000000'; 
-	    this.context.stroke();
-	    this.context.closePath();
-	    this.context.font = '40pt Kremlin Pro Web';
-	    this.context.fillStyle = '#000000';
-	    this.context.fillText('Restart', xPos+20, yPos+60);
+		    this.context.rect(xPos, yPos, 200, 100); 
+		    this.context.fillStyle = '#FFFFFF'; 
+		    this.context.fillStyle = 'rgba(225,225,225,0.5)';
+		    this.context.fill();
+		    this.context.lineWidth = 2;
+		    this.context.strokeStyle = '#000000'; 
+		    this.context.stroke();
+		    this.context.closePath();
+		    this.context.font = '40pt Kremlin Pro Web';
+		    this.context.fillStyle = '#000000';
+		    this.context.fillText('Restart', xPos+20, yPos+60);
 
-	    this.canvas.addEventListener('click', function(evt) {
+	    	this.canvas.addEventListener('click', function(evt) {
 	    			
-	    	_this.context.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
-				_this.player = new Player(3, 3, "blue", 50, 120, _this);
-				_this.enemy = new Bot(3, 3, "red", 20, 120, _this);
-				_this.player.addListeners();
+		    	_this.context.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
+					_this.player = new Player(3, 3, "blue", 50, 120, _this);
+					_this.enemy = new Bot(3, 3, "red", 20, 120, _this);
+					_this.player.addListeners();
 	    }, false);
 		}
 		else {
