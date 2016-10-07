@@ -8,7 +8,7 @@ class Bot extends Player {
 		this.gridIndex = 0;
 		this.currentGrid = 0;
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index);
-
+ 
 	}
 
 	decide(pixelVec, k) {
@@ -24,20 +24,29 @@ class Bot extends Player {
 			this.moveAngle = 0;
 		}
 	}
+	goToNextGridSection(k) {
+		//this.position.x += this.speed* + Math.cos(Math.atan(k));
+		//this.position.y-= this.speed * + Math.sin(Math.atan(k));
+		//this.angle+= Math.atan(k);
+		//this.angle += this.moveAngle * Math.PI / 180;
+		//this.position.x += this.speed * Math.sin(this.angle);
+		//this.position.y -= this.speed * Math.cos(this.angle);
+
+
+	}
 
 	newPos() {
 		var x1, x2, y1, y2;
 	   	var newAngle = this.moveAngle * Math.PI / 180; 	
 	   	this.angle += this.moveAngle * Math.PI / 180;
-	   	// this.detector.rotate(this.moveAngle * Math.PI / 180);
 	   	y1 = this.position.y;
 	   	x1 = this.position.x;
 	   	this.position.x += this.speed * Math.sin(this.angle);
 	   	this.position.y -= this.speed * Math.cos(this.angle);
-	   	// this.detector.position.x += this.speed * Math.sin(this.angle);
-	   	// this.detector.position.y -= this.speed * Math.cos(this.angle);
+
 	   	x2 = this.position.x;
 	   	y2 = this.position.y;
+
 	   	var k = (y2-y1)/(x2-x1);
 
 	   	var pixelVec = [];
@@ -51,11 +60,36 @@ class Bot extends Player {
 	   		pixelVec.push(pixelColors);
 	   	}
 	   	this.decide(pixelVec, k);
-	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
-	   	this.currentGridSection.occupation++;
-	   	this.pathFinding.run(this.currentGridSection);
 	   	this.checkCollisions();
+	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
+	   	/*console.log("anim: " + this.currentGridSection.index);
+	   	console.log("next: " + this.pathFinding.currentGridSection.index);*/
+	   //	this.pathFinding.run();
+	   //	this.pathFinding.run(this.currentGridSection);
+	   	/*var kNew = (this.pathFinding.currentGridSection.centerY - this.position.y) / 
+	   	(this.pathFinding.currentGridSection.centerX - this.position.x);
+	   	this.goToNextGridSection(kNew);*/
+
 	   	this.update();
+	}
+	update() {
+
+		if(this.hole == 0) {
+			this.ctx.save();
+			this.ctx.translate(this.position.x, this.position.y);
+			this.ctx.rotate(this.angle);
+		  	this.ctx.fillStyle = this.color;
+			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
+			this.ctx.restore();
+			this.currentGridSection.occupation++;
+
+
+		} else {
+			this.hole--;
+			if(this.hole == 0) {
+				this.nextHoleTimer();
+			}
+		}
 	}
 	
 }

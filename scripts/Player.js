@@ -36,9 +36,9 @@ class Player {
 			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 			this.ctx.restore();
 
+
 		} else {
 			this.hole--;
-
 			if(this.hole == 0) {
 				this.nextHoleTimer();
 			}

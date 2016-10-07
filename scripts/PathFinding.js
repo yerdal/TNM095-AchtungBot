@@ -7,156 +7,151 @@ class PathFinding {
 		this.grid = grid;
 		this.setGoal();
 		this.visitedList = [];
-		this.visitedList.push(this.grid[currentIndex]);
-		this.queue = new PriorityQueue({comparator: function(a, b) {
-			return (a.g + a.h) - (b.g + b.h);
-		}});
-		this.init();
+		this.queue = [];
+		this.run();
 	}
 	setGoal() {
-		this.goalIndex = 0;
+		this.goalIndex = 15;
 	}
 	addToQueue(obj) {
 		var found = false;
-		for (var i = 0; i < visitedList.length; i++) {
-			if (visitedList[i].index == obj.index) {
+		for (var i = 0; i < this.visitedList.length; i++) {
+			if (this.visitedList[i].index == obj.index) {
 				found = true;
 			}
 		}
 		if (!found) {
-			this.queue.queue(obj);
+			this.queue.push(obj);
+			this.queue.sort(function(a, b) {
+				if (a.f < b.f)
+		    		return 1;
+		  		if (a.f > b.f)
+		    		return -1;
+
+		  		return 0;
+			});
 		}
 	}
-	run(currentGridSection) {
-		if (this.queue.length > 0) {
-			if (currentGridSection.index == this.currentGridSection.index) {
-				this.currentGridSection = this.queue.dequeue();
-				console.log(this.currentGridSection.index);
+	run() {
+		this.currentGridSection.g = 0;
+		this.currentGridSection.h = this.calcManhattan(this.currentGridSection.index, this.goalIndex);
+		this.currentGridSection.f = this.currentGridSection.g+this.currentGridSection.h;
+		this.addToQueue(this.currentGridSection);
+		while (this.queue.length > 0) {
+				this.currentGridSection = this.queue.pop();
 				this.visitedList.push(this.currentGridSection);
 				if (this.currentGridSection.reachedGoal()) {
-					console.log("TJU  DU E KLAR");
+					console.log("DONE");
+					console.log(this.visitedList);
 					return;
 				}
+				var adjArr = [];
 				var adjArr = this.setAdjacentSections(this.positionCheck());
-				var validSections = [];
 				for (var i = 0; i < adjArr.length; i++) {
-					if (adjArr[i].occupation == 0) {
-						this.grid.sections[adjArr[i]].h = this.calcManhattan(adjArr[i], this.goalIndex);
-						this.grid.sections[adjArr[i]].g++;
-						this.addToQueue(this.grid.sections[adjArr[i]]);
-						this.grid.sections[adjArr[i]]
-
-					}
+					this.grid.sections[adjArr[i]].h = this.calcManhattan(adjArr[i], this.goalIndex);
+					this.grid.sections[adjArr[i]].g++;
+					this.grid.sections[adjArr[i]].f = this.grid.sections[adjArr[i]].g + this.grid.sections[adjArr[i]].h;
+					this.addToQueue(this.grid.sections[adjArr[i]]);
 				}
-			}
 		}
 	}
-	init() {
-		this.queue.queue(this.currentGridSection);
-		var adjArr = this.setAdjacentSections(this.positionCheck());
-		var validSections = [];
-		this.visitedList.push(this.currentGridSection);
 
-		for (var i = 0; i < adjArr.length; i++) {
-			if (this.grid.sections[adjArr[i]].occupation == 0) {
-				this.grid.sections[adjArr[i]].h = this.calcManhattan(adjArr[i], this.goalIndex);
-				this.grid.sections[adjArr[i]].g++;
-				this.queue.queue(this.grid.sections[adjArr[i]]);
-			}
-		}
-	}
 
 	calcManhattan (a, b) {
 		var dist = Math.abs(Math.floor(a / 10) - Math.floor(b / 10)) + Math.abs(a % 10 - b % 10);
+
 		return dist;
-	}
-	nextGrid(index) {
-		if (index != this.currentIndex) {
-			this.visitedList.push(this.grid[currentIndex]);
-			this.currentIndex = index;
-			this.grid.sections[this.currentIndex].g++;
-			run();
-		}
 	}
 	positionCheck() {
 		var i = this.currentGridSection.index;
 		var position;
 
-		if (i % 10 == 9 && (i != 9 || i != 99)) {
-			position = "LAST_COL_NO_CORNERS";
-		}
-		else if (i % 10 == 0 && (i != 0 || i != 90)) {
-			position = "FIRST_COL_NO_CORNERS";
-		}
-		else if (i < 9 && i != 0) {
-			position = "FIRST_ROW_NO_CORNERS";
-		}
-		else if (i > 90 && i != 99) {
-			position = "LAST_ROW_NOT_CORNERS";
-		}
-		else if (i == 9 ) {
-			position = "TOP_RIGHT_CORNER";
-		}
-		else if (i == 99) {
-			position = "BOTTOM_RIGHT_CORNER";
-		}
-		else if (i == 0) {
+		// corners
+		if (i == 0) {
 			position = "TOP_LEFT_CORNER";
+		}
+		else if (i == 9) {
+			position = "TOP_RIGHT_CORNER";
 		}
 		else if (i == 90) {
 			position = "BOTTOM_LEFT_CORNER";
 		}
-		else {
-			position ="MIDDLE";
+		else if (i == 99) {
+			position = "BOTTOM_RIGHT_CORNER";
+		}
+		else if (i > 0 && i < 9) {
+			position = "FIRST_ROW_NO_CORNERS";
+		}
+		else if (i > 10 && i < 19) {
+			position = "MIDDLE";
+		}
+		else if (i > 20 && i <29) {
+			position = "MIDDLE";
+		}
+		else if (i > 30 && i < 39) {
+			position = "MIDDLE";
+
+		}
+		else if (i >  40 && i < 49) {
+			position = "MIDDLE";
+
+		}
+		else if (i > 50 && i < 59) {
+			position = "MIDDLE";
+
+		}
+		else if (i > 60 && i < 69) {
+			position = "MIDDLE";
+
+		}
+		else if (i > 70 && i <= 79) {
+			position = "MIDDLE";
+
+		}
+		else if (i > 80 && i < 89) {
+			position = "MIDDLE";
+
+		}
+		else if (i > 90 && i < 99) {
+			position = "LAST_ROW_NO_CORNERS";
+
 		}
 		return position;
 	}
 	setAdjacentSections(check) {
 		var adjSections = [];
-		if (check == "LAST_COL_NO_CORNERS") {
-			adjSections.push(this.currentIndex - 1);
-			adjSections.push(this.currentIndex - 10);
-			adjSections.push(this.currentIndex + 10);
+		if (check == "FIRST_ROW_NO_CORNERS") {
+			adjSections.push(this.currentGridSection.index + 1);
+			adjSections.push(this.currentGridSection.index - 1);
+			adjSections.push(this.currentGridSection.index + 10);
 		}
-		else if (check == "FIRST_COL_NO_CORNERS") {
-			adjSections.push(this.currentIndex + 1);
-			adjSections.push(this.currentIndex - 10);
-			adjSections.push(this.currentIndex + 10);
-		}
-		else if (check == "FIRST_ROW_NO_CORNERS") {
-			adjSections.push(this.currentIndex + 1);
-			adjSections.push(this.currentIndex - 1);
-			adjSections.push(this.currentIndex + 10);
-		}
-		else if (check == "LAST_ROW_NOT_CORNERS") {
-			adjSections.push(this.currentIndex + 1);
-			adjSections.push(this.currentIndex - 1);
-			adjSections.push(this.currentIndex - 10);
+		else if (check == "LAST_ROW_NO_CORNERS") {
+			adjSections.push(this.currentGridSection.index + 1);
+			adjSections.push(this.currentGridSection.index - 1);
+			adjSections.push(this.currentGridSection.index - 10);
 		}
 		else if (check == "TOP_RIGHT_CORNER") {
-			adjSections.push(this.currentIndex - 1);
-			adjSections.push(this.currentIndex + 10);
+			adjSections.push(this.currentGridSection.index - 1);
+			adjSections.push(this.currentGridSection.index + 10);
 		}
 		else if (check == "TOP_LEFT_CORNER") {
-				adjSections.push(this.currentIndex + 1);
-				adjSections.push(this.currentIndex + 10);
-			
+			adjSections.push(this.currentGridSection.index + 1);
+			adjSections.push(this.currentGridSection.index + 10);
 		}
 		else if (check == "BOTTOM_LEFT_CORNER") {
-			adjSections.push(this.currentIndex + 1);
-			adjSections.push(this.currentIndex - 10);
+			adjSections.push(this.currentGridSection.index + 1);
+			adjSections.push(this.currentGridSection.index - 10);
 		}
 		else if (check == "BOTTOM_RIGHT_CORNER") {
-			adjSections.push(this.currentIndex - 1);
-			adjSections.push(this.currentIndex - 10);
+			adjSections.push(this.currentGridSection.index - 1);
+			adjSections.push(this.currentGridSection.index - 10);
 		}
 		// middle
 		else {
-			adjSections.push(this.currentIndex + 1);
-			adjSections.push(this.currentIndex - 1);
-			adjSections.push(this.currentIndex + 10);
-			adjSections.push(this.currentIndex - 10);
-
+			adjSections.push(this.currentGridSection.index + 1);
+			adjSections.push(this.currentGridSection.index - 1);
+			adjSections.push(this.currentGridSection.index + 10);
+			adjSections.push(this.currentGridSection.index - 10);
 		}
 		return adjSections;
 
