@@ -4,11 +4,11 @@ var PathFinding = require("./PathFinding");
 class Bot extends Player {
 	constructor(width, height, color, x, y, gameArea) {
 		super(width, height, color, x, y, gameArea);
-
+		var _this = this;
 		this.gridIndex = 0;
 		this.currentGrid = 0;
-		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index);
-
+		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, _this);
+		this.goalAngle = [-1 -2];
 	}
 
 	decide(pixelVec, k) {
@@ -17,13 +17,96 @@ class Bot extends Player {
 			if (pixelVec[i] != 0) {
 					this.moveAngle = 4;
 					white = false;
-					break;
+					return;
 			}
 		}
 		if (white) {
 			this.moveAngle = 0;
 		}
+		if (this.goalAngle[0] != -1) {
+			this.goToGoalAngle();
+		}
 	}
+
+	goToGoalAngle() {
+		var curAngle = this.checkAngle(this.angle);
+		if (curAngle > this.goalAngle[0] && curAngle < this.goalAngle[1]) {
+			this.goalAngle[0] = -1;
+			this.goalAngle[1] = -1;
+			
+		} else {
+			var goal = this.goalAngle[0]+5;
+			var opposite = goal + 180;
+			opposite = goal % 360;
+			if(goal < 180) {
+				if (curAngle > opposite) {
+					this.moveAngle = 4;
+				} else {
+					this.moveAngle = -4;
+				}
+			} else {
+				if (curAngle > goal || curAngle < opposite) {
+					this.moveAngle = -4;
+				} else {
+					this.moveAngle = 4;
+				}
+			}
+		}
+	}
+
+	checkAngle(angle) {
+		var answer = angle % (Math.PI*2);
+		answer = (answer * 180) * Math.PI;
+		return answer; 
+	}
+
+	// goRight() {
+	// 	console.log("Jag vill åt höger!");
+	// 	console.log(this.angle);
+	// 	let curAngle = this.checkAngle(this.angle);
+	// 	if (curAngle < 180) {
+	// 		do {
+	// 			this.moveAngle = -4;
+	// 		} while (curAngle > 5 && checkAngle(curAngle < 0));
+	// 	} else {
+	// 					do {
+	// 			this.moveAngle = 4;
+	// 		} while (curAngle > 5 && curAngle < 0);
+	// 	}
+	// }
+
+	// goLeft() {
+	// 	console.log("VÄNSTER!");
+	// 	console.log(this.angle);
+	// 	let curAngle = this.checkAngle(this.angle);
+	// 	if (curAngle < 180) {
+	// 		this.moveAngle = 4;
+	// 	} else {
+	// 		this.moveAngle = -4;
+	// 	}
+	// }
+
+	// goUp() {
+	// 	console.log("Uppåt kanske?");
+	// 	console.log(this.angle);
+	// 	let curAngle = this.checkAngle(this.angle);
+	// 	if (curAngle < 90 || curAngle > 270) {
+	// 		this.moveAngle = 4;
+	// 	} else {
+	// 		this.moveAngle = -4;
+	// 	}
+	// }
+
+	// goDown() {
+	// 	console.log("Lets get down tonight!");
+	// 	console.log(this.angle);
+	// 	let curAngle = this.checkAngle(this.angle);
+	// 	if (curAngle < 90 || curAngle > 270) {
+	// 		this.moveAngle = -4;
+	// 	} else {
+	// 		this.moveAngle = 4;
+	// 	}
+	// }
 
 	newPos() {
 		var x1, x2, y1, y2;

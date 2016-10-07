@@ -1,7 +1,8 @@
 var PriorityQueue = require("js-priority-queue");
 
 class PathFinding {
-	constructor(grid, currentIndex) {
+	constructor(grid, currentIndex, parent) {
+		this.parent = parent;
 		this.currentGridSection = grid.sections[currentIndex];
 		this.currentIndex = currentIndex;
 		this.grid = grid;
@@ -27,10 +28,34 @@ class PathFinding {
 			this.queue.queue(obj);
 		}
 	}
+
+	goToGrid() {
+
+	}
+
 	run(currentGridSection) {
 		if (this.queue.length > 0) {
 			if (currentGridSection.index == this.currentGridSection.index) {
 				this.currentGridSection = this.queue.dequeue();
+				console.log("Tjobajs!");
+				if(this.currentIndex-1 == this.currentGridSection.index) {
+					// this.parent.goRight();
+					this.parent.goalAngle[0] = 355;
+					this.parent.goalAngle[1] = 5;
+				} else if(this.currentIndex+1 == this.currentGridSection.index) {
+					// this.parent.goLeft();
+					this.parent.goalAngle[0] = 175;
+					this.parent.goalAngle[1] = 185;
+				} else if(this.currentIndex-10 == this.currentGridSection.index) {
+					// this.parent.goDown();
+					this.parent.goalAngle[0] = 265;
+					this.parent.goalAngle[1] = 275;
+				} else if(this.currentIndex+10 == this.currentGridSection.index) {
+					// this.parent.goUp();
+					this.parent.goalAngle[0] = 85;
+					this.parent.goalAngle[1] = 95;
+				}
+				console.log(this.currentGridSection);
 				console.log(this.currentGridSection.index);
 				this.visitedList.push(this.currentGridSection);
 				if (this.currentGridSection.reachedGoal()) {
@@ -44,7 +69,7 @@ class PathFinding {
 						this.grid.sections[adjArr[i]].h = this.calcManhattan(adjArr[i], this.goalIndex);
 						this.grid.sections[adjArr[i]].g++;
 						this.addToQueue(this.grid.sections[adjArr[i]]);
-						this.grid.sections[adjArr[i]]
+						this.grid.sections[adjArr[i]];
 
 					}
 				}

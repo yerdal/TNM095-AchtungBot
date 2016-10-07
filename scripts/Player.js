@@ -11,7 +11,7 @@ class Player {
 		this.width = width;
 		this.height = height;
 		this.speed = 2;
-		this.angle = Math.floor(Math.random() * 361);
+		this.angle = Math.random() * Math.PI * 2;
 		this.moveAngle = 0;
 		this.color = color;
 		this.addListeners();
@@ -27,12 +27,11 @@ class Player {
 	}
 
 	update() {
-
 		if(this.hole == 0) {
 			this.ctx.save();
 			this.ctx.translate(this.position.x, this.position.y);
 			this.ctx.rotate(this.angle);
-		  	this.ctx.fillStyle = this.color;
+		  this.ctx.fillStyle = this.color;
 			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 			this.ctx.restore();
 
