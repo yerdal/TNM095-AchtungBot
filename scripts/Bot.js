@@ -7,8 +7,16 @@ class Bot extends Player {
 		var _this = this;
 		this.gridIndex = 0;
 		this.currentGrid = 0;
-		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, _this);
-		this.goalAngle = [-1 -2];
+		this.goalAngle = [-1 -1];
+		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index);
+ 		this.path = this.pathFinding.visitedList;
+ 		console.log("path: ");
+ 		for (var i = 0; i < this.path.length; i++) {
+ 			console.log(this.path[i].index);
+ 		}
+ 		this.goal = this.path.pop();
+ 		console.log("start: " + this.gameArea.grid.getCurrentGridSection(this.position).index);
+ 		console.log("goal: " + this.goal.index);
 	}
 
 	decide(pixelVec, k) {
@@ -26,6 +34,13 @@ class Bot extends Player {
 		if (this.goalAngle[0] != -1) {
 			this.goToGoalAngle();
 		}
+	}
+	goToNextGridSection(k) {
+		/*this.position.x += this.speed* + Math.cos(Math.atan(k));
+		this.position.y-= this.speed * + Math.sin(Math.atan(k));*/
+		this.angle= Math.atan(k);
+		this.position.x += this.speed * Math.sin(this.angle*2);
+		this.position.y -= this.speed * Math.cos(this.angle*2);
 	}
 
 	goToGoalAngle() {
@@ -130,11 +145,63 @@ class Bot extends Player {
 	   		pixelVec.push(pixelColors);
 	   	}
 	   	this.decide(pixelVec, k);
-	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
-	   	this.currentGridSection.occupation++;
-	   	this.pathFinding.run(this.currentGridSection);
 	   	this.checkCollisions();
-	   	this.update();
+	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
+	   	/*console.log("anim: " + this.currentGridSection.index);
+	   	console.log("next: " + this.pathFinding.currentGridSection.index);*/
+	   //	this.pathFinding.run();
+	   //	this.pathFinding.run(this.currentGridSection);
+	   	/*var kNew = (this.pathFinding.currentGridSection.centerY - this.position.y) / 
+	   	(this.pathFinding.currentGridSection.centerX - this.position.x);
+	   	this.goToNextGridSection(kNew);*/
+	   	if (this.path.length == 0) {
+	   		console.log("NÄMEN");
+	   	}
+	   	if (this.currentGridSection.index == this.path[0].index) {
+	   		console.log("DUKTIG");
+	   		this.path.shift();
+	   	}
+	   	else
+	   	{
+	   		if(this.currentGridSection.index+1 == this.path[0].index) {
+				// go Right
+					this.goalAngle[0] = 355;
+					this.goalAngle[1] = 5;
+				} else if(this.currentGridSection.index-1 == this.path[0].index) {
+					// this.parent.goLeft();
+					this.goalAngle[0] = 175;
+					this.goalAngle[1] = 185;
+				} else if(this.currentGridSection.index-10 == this.path[0].index) {
+					// this.parent.goDown();
+					this.goalAngle[0] = 265;
+					this.goalAngle[1] = 275;
+				} else if(this.currentGridSection.index+10 == this.path[0].index) {
+					// this.parent.goUp();
+					this.goalAngle[0] = 85;
+					this.goalAngle[1] = 95;
+	   		}
+	   	}
+	   	this.update();	   	
+	}
+
+	update() {
+
+		if(this.hole == 0) {
+			this.ctx.save();
+			this.ctx.translate(this.position.x, this.position.y);
+			this.ctx.rotate(this.angle);
+		  	this.ctx.fillStyle = this.color;
+			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
+			this.ctx.restore();
+			this.currentGridSection.occupation++;
+
+
+		} else {
+			this.hole--;
+			if(this.hole == 0) {
+				this.nextHoleTimer();
+			}
+		}
 	}
 	
 }
