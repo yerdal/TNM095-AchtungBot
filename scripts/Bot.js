@@ -16,7 +16,6 @@ class Bot extends Player {
 		for (var i = 0; i < pixelVec.length; i++) {
 			if (pixelVec[i] != 0) {
 					this.moveAngle = 4;
-					console.log("hej");
 					white = false;
 					break;
 			}
@@ -30,17 +29,14 @@ class Bot extends Player {
 		var x1, x2, y1, y2;
 	   	var newAngle = this.moveAngle * Math.PI / 180; 	
 	   	this.angle += this.moveAngle * Math.PI / 180;
-	   	// this.detector.rotate(this.moveAngle * Math.PI / 180);
 	   	y1 = this.position.y;
 	   	x1 = this.position.x;
 	   	this.position.x += this.speed * Math.sin(this.angle);
 	   	this.position.y -= this.speed * Math.cos(this.angle);
-	   	// this.detector.position.x += this.speed * Math.sin(this.angle);
-	   	// this.detector.position.y -= this.speed * Math.cos(this.angle);
 	   	x2 = this.position.x;
 	   	y2 = this.position.y;
 	   	var k = (y2-y1)/(x2-x1);
-	   	// console.log(Math.atan(k));
+	   	// console.log(k);
 
 	   	var pixelVec = [];
 	   	// check if new obstacle
@@ -49,7 +45,6 @@ class Bot extends Player {
 	   		newPos.x = this.position.x + Math.cos(Math.atan(k))*i;
 	   		newPos.y = this.position.y + Math.sin(Math.atan(k))*i;
 	   		var pixelColors = _.reduce(this.ctx.getImageData(newPos.x, newPos.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
-	   		// var pixelColors = this.ctx.getImageData(newPos.x, newPos.y, 1, 1);
 	   		pixelVec.push(pixelColors);
 	   	}
 	   	this.decide(pixelVec, k);
