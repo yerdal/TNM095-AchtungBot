@@ -33,12 +33,12 @@ class PathFinding {
 		}
 	}
 
-recalculate(currentSection) {
-	this.currentGridSection = currentSection;
-	this.visitedList = [];
-	this.queue = [];
-	this.run();
-}
+	recalculate(currentSection) {
+		this.currentGridSection = currentSection;
+		this.visitedList = [];
+		this.queue = [];
+		this.run();
+	}
 
 	run() {
 		this.currentGridSection.g = 0;
