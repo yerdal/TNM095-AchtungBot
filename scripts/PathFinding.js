@@ -32,12 +32,18 @@ class PathFinding {
 		}
 	}
 
-recalculate(currentSection) {
-	this.currentGridSection = currentSection;
-	this.visitedList = [];
-	this.queue = [];
-	this.run();
-}
+	recalculate(currentSection) {
+		this.currentGridSection = currentSection;
+		this.visitedList = [];
+		this.queue = [];
+		//set g, f and h to 0 on all grid sections before recalculating
+		for (var i = 0; i < this.grid.sections.length; i++) {
+			this.grid.sections[i].g = 0;
+			this.grid.sections[i].h = 0;
+			this.grid.sections[i].f = 0;
+		}
+		this.run();
+	}
 
 	run() {
 		this.currentGridSection.g = 0;
@@ -48,7 +54,6 @@ recalculate(currentSection) {
 				this.currentGridSection = this.queue.pop();
 				this.visitedList.push(this.currentGridSection);
 				if (this.currentGridSection.reachedGoal()) {
-					console.log(this.visitedList);
 					return;
 				}
 				var adjArr = [];

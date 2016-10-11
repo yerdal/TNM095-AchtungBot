@@ -25,7 +25,7 @@ class Bot extends Player {
 			if (pixelVec[i] != 0) {
 					this.moveAngle = 4;
 					white = false;
-					return;
+					break;
 			}
 		}
 		if (white) {
@@ -48,11 +48,38 @@ class Bot extends Player {
 		if (curAngle > this.goalAngle[0] && curAngle < this.goalAngle[1]) {
 			this.goalAngle[0] = -1;
 			this.goalAngle[1] = -1;
-			
-		} else {
+		} 
+		// special case for 0 and 355
+		else if (this.goalAngle[0] == 355 && this.goalAngle[1] == 5) {
+			if (curAngle < this.goalAngle[1] || curAngle > this.goalAngle[0]) {
+				this.goalAngle[0] = -1;
+				this.goalAngle[1] = -1;
+			}
+			else{
+				var goal = this.goalAngle[0]+5;
+
+				var opposite = goal + 180;
+				opposite = opposite % 360;
+				if(goal < 180) {
+					if (curAngle > opposite) {
+						this.moveAngle = 4;
+					} else {
+						this.moveAngle = -4;
+					}
+				} else {
+					if (curAngle > goal || curAngle < opposite) {
+						this.moveAngle = -4;
+					} else {
+						this.moveAngle = 4;
+					}
+				}
+			}
+		}
+		else {
 			var goal = this.goalAngle[0]+5;
+
 			var opposite = goal + 180;
-			opposite = goal % 360;
+			opposite = opposite % 360;
 			if(goal < 180) {
 				if (curAngle > opposite) {
 					this.moveAngle = 4;
@@ -71,7 +98,7 @@ class Bot extends Player {
 
 	checkAngle(angle) {
 		var answer = angle % (Math.PI*2);
-		answer = (answer * 180) * Math.PI;
+		answer = (answer * 180) / Math.PI;
 		return answer; 
 	}
 
@@ -86,19 +113,11 @@ class Bot extends Player {
 	   	x2 = this.position.x;
 	   	y2 = this.position.y;
 	   	var k = (y2-y1)/(x2-x1);
-
 	   	var pixelVec = [];
 	   	// check if new obstacle
 	   	var newPos = {};
-	   	for (var i = 0; i < 40; i++) {
-	   		newPos.x = this.position.x + Math.cos(Math.atan(k))*i;
-	   		newPos.y = this.position.y + Math.sin(Math.atan(k))*i;
-	   		var pixelColors = _.reduce(this.ctx.getImageData(newPos.x, newPos.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
-	   		pixelVec.push(pixelColors);
-	   	}
-	   	this.decide(pixelVec, k);
-	   	this.checkCollisions();
-	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index && this.currentGridSection.index != this.path[0].index) {
+
+	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index) {
 	   		this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
 	   		this.path = this.pathFinding.visitedList;
 	   	}
@@ -114,30 +133,47 @@ class Bot extends Player {
 
 	   	else
 	   	{
+	   		/*console.log("Current index: " + this.currentGridSection.index);
+	   		console.log("Path: ");
+	   		console.log(this.path);*/
 	   		if(this.currentGridSection.index+1 == this.path[0].index) {
 				// go Right
-					this.goalAngle[0] = 355;
-					this.goalAngle[1] = 5;
-				} else if(this.currentGridSection.index-1 == this.path[0].index) {
+				console.log("right");
+				this.goalAngle[0] = 85;
+				this.goalAngle[1] = 95;
+			} else if(this.currentGridSection.index - 1 == this.path[0].index) {
 					// go Left
-					this.goalAngle[0] = 175;
-					this.goalAngle[1] = 185;
-				} else if(this.currentGridSection.index-10 == this.path[0].index) {
-					// go Down
+					console.log("left");
 					this.goalAngle[0] = 265;
 					this.goalAngle[1] = 275;
-				} else if(this.currentGridSection.index+10 == this.path[0].index) {
+			} else if(this.currentGridSection.index + 10 == this.path[0].index) {
+					// go Down
+					console.log("down");
+					this.goalAngle[0] = 175;
+					this.goalAngle[1] = 185;
+
+			} else if(this.currentGridSection.index - 10 == this.path[0].index) {
 					// go Up
-					this.goalAngle[0] = 85;
-					this.goalAngle[1] = 95;
+					console.log("up");
+					this.goalAngle[0] = 355;
+					this.goalAngle[1] = 5;
 	   		}
 	   	}
+	   	for (var i = 0; i < 40; i++) {
+	   		newPos.x = this.position.x + Math.cos(Math.atan(k))*i;
+	   		newPos.y = this.position.y + Math.sin(Math.atan(k))*i;
+	   		var pixelColors = _.reduce(this.ctx.getImageData(newPos.x, newPos.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
+	   		pixelVec.push(pixelColors);
+	   	}
+	   	this.decide(pixelVec, k);
+	   	this.checkCollisions();
+
 	   	this.update();	   	
 	}
 
 	update() {
 
-		if(this.hole == 0) {
+		//if(this.hole == 0) {
 			this.ctx.save();
 			this.ctx.translate(this.position.x, this.position.y);
 			this.ctx.rotate(this.angle);
@@ -147,12 +183,12 @@ class Bot extends Player {
 			this.currentGridSection.occupation++;
 
 
-		} else {
+		/*} else {
 			this.hole--;
 			if(this.hole == 0) {
 				this.nextHoleTimer();
 			}
-		}
+		}*/
 	}
 	
 }
