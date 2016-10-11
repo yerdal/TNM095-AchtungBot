@@ -31,10 +31,11 @@ class Player {
 			this.ctx.save();
 			this.ctx.translate(this.position.x, this.position.y);
 			this.ctx.rotate(this.angle);
-		  this.ctx.fillStyle = this.color;
+		  	this.ctx.fillStyle = this.color;
 			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 			this.ctx.restore();
-
+			this.gameArea.grid.getCurrentGridSection(this.position).occupation++;
+			this.gameArea.largeGrid.getCurrentGridSection(this.position).occupation++;
 
 		} else {
 			this.hole--;
@@ -78,10 +79,7 @@ class Player {
 	checkCollisions() {
 		this.checkWallCollision();
 		this.checkWormCollision();
-		//this.gameArea.grid.getCurrentGridSection(this.position);
-
 	}
-
 	
 	checkWallCollision() {
 		var canvasWidth = this.gameArea.canvas.width;

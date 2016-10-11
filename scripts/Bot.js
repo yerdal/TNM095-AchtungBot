@@ -1,6 +1,7 @@
 var Player = require("./Player");
 var _ = require("underscore");
 var PathFinding = require("./PathFinding");
+var BehaviorTree = require('./BehaviourTree');
 class Bot extends Player {
 	constructor(width, height, color, x, y, gameArea) {
 		super(width, height, color, x, y, gameArea);
@@ -10,13 +11,14 @@ class Bot extends Player {
 		this.goalAngle = [-1 -1];
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index);
  		this.path = this.pathFinding.visitedList;
- 		console.log("path: ");
- 		for (var i = 0; i < this.path.length; i++) {
+ 		this.behaviorTree = new BehaviorTree(this.pathFinding);
+ 		//console.log("path: ");
+ 		/*for (var i = 0; i < this.path.length; i++) {
  			console.log(this.path[i].index);
- 		}
+ 		}*/
  		this.goal = this.path.pop();
- 		console.log("start: " + this.gameArea.grid.getCurrentGridSection(this.position).index);
- 		console.log("goal: " + this.goal.index);
+ 		//console.log("start: " + this.gameArea.grid.getCurrentGridSection(this.position).index);
+ 		//console.log("goal: " + this.goal.index);
 	}
 
 	decide(pixelVec, k) {
@@ -104,7 +106,7 @@ class Bot extends Player {
 
 	newPos() {
 		var x1, x2, y1, y2;
-	   	var newAngle = this.moveAngle * Math.PI / 180; 	
+	   	var newAngle = this.moveAngle * Math.PI / 180;
 	   	this.angle += this.moveAngle * Math.PI / 180;
 	   	y1 = this.position.y;
 	   	x1 = this.position.x;
@@ -173,22 +175,23 @@ class Bot extends Player {
 
 	update() {
 
-		//if(this.hole == 0) {
+		if(this.hole == 0) {
 			this.ctx.save();
 			this.ctx.translate(this.position.x, this.position.y);
 			this.ctx.rotate(this.angle);
 		  	this.ctx.fillStyle = this.color;
 			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 			this.ctx.restore();
+			this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
 			this.currentGridSection.occupation++;
+			this.gameArea.largeGrid.getCurrentGridSection(this.position).occupation++;
 
-
-		/*} else {
+		} else {
 			this.hole--;
 			if(this.hole == 0) {
 				this.nextHoleTimer();
 			}
-		}*/
+		}
 	}
 	
 }

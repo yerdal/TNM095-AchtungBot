@@ -9,7 +9,7 @@ class PathFinding {
 		this.queue = [];
 		this.run();
 	}
-	setGoal() {
+	setGoal(index) {
 		this.goalIndex = 15;
 	}
 	addToQueue(obj) {
