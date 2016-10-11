@@ -98,6 +98,10 @@ class Bot extends Player {
 	   	}
 	   	this.decide(pixelVec, k);
 	   	this.checkCollisions();
+	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index && this.currentGridSection.index != this.path[0].index) {
+	   		this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+	   		this.path = this.pathFinding.visitedList;
+	   	}
 	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
 
 	   	if (this.path.length == 0) {
@@ -115,15 +119,15 @@ class Bot extends Player {
 					this.goalAngle[0] = 355;
 					this.goalAngle[1] = 5;
 				} else if(this.currentGridSection.index-1 == this.path[0].index) {
-					// this.parent.goLeft();
+					// go Left
 					this.goalAngle[0] = 175;
 					this.goalAngle[1] = 185;
 				} else if(this.currentGridSection.index-10 == this.path[0].index) {
-					// this.parent.goDown();
+					// go Down
 					this.goalAngle[0] = 265;
 					this.goalAngle[1] = 275;
 				} else if(this.currentGridSection.index+10 == this.path[0].index) {
-					// this.parent.goUp();
+					// go Up
 					this.goalAngle[0] = 85;
 					this.goalAngle[1] = 95;
 	   		}
