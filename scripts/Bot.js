@@ -10,13 +10,13 @@ class Bot extends Player {
 		this.goalAngle = [-1 -1];
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index);
  		this.path = this.pathFinding.visitedList;
- 		console.log("path: ");
- 		for (var i = 0; i < this.path.length; i++) {
- 			console.log(this.path[i].index);
- 		}
+ 		// console.log("path: ");
+ 		// for (var i = 0; i < this.path.length; i++) {
+ 			// console.log(this.path[i].index);
+ 		// }
  		this.goal = this.path.pop();
- 		console.log("start: " + this.gameArea.grid.getCurrentGridSection(this.position).index);
- 		console.log("goal: " + this.goal.index);
+ 		// console.log("start: " + this.gameArea.grid.getCurrentGridSection(this.position).index);
+ 		// console.log("goal: " + this.goal.index);
 	}
 
 	decide(pixelVec, k) {
@@ -71,13 +71,13 @@ class Bot extends Player {
 
 	checkAngle(angle) {
 		var answer = angle % (Math.PI*2);
-		answer = (answer * 180) * Math.PI;
+		answer = (answer * 180) / Math.PI;
 		return answer; 
 	}
 
 	newPos() {
 		var x1, x2, y1, y2;
-	   	var newAngle = this.moveAngle * Math.PI / 180; 	
+	   	var newAngle = this.moveAngle * Math.PI / 180;
 	   	this.angle += this.moveAngle * Math.PI / 180;
 	   	y1 = this.position.y;
 	   	x1 = this.position.x;
