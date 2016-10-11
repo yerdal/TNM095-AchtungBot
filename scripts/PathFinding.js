@@ -1,8 +1,7 @@
 var PriorityQueue = require("js-priority-queue");
 
 class PathFinding {
-	constructor(grid, currentIndex, parent) {
-		this.parent = parent;
+	constructor(grid, currentIndex) {
 		this.currentGridSection = grid.sections[currentIndex];
 		this.currentIndex = currentIndex;
 		this.grid = grid;
@@ -33,6 +32,14 @@ class PathFinding {
 			});
 		}
 	}
+
+recalculate(currentSection) {
+	this.currentGridSection = currentSection;
+	this.visitedList = [];
+	this.queue = [];
+	this.run();
+}
+
 	run() {
 		this.currentGridSection.g = 0;
 		this.currentGridSection.h = this.calcManhattan(this.currentGridSection.index, this.goalIndex);
@@ -42,7 +49,6 @@ class PathFinding {
 				this.currentGridSection = this.queue.pop();
 				this.visitedList.push(this.currentGridSection);
 				if (this.currentGridSection.reachedGoal()) {
-					console.log("DONE");
 					console.log(this.visitedList);
 					return;
 				}

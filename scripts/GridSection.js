@@ -17,7 +17,7 @@ class GridSection {
 		if (this.h == 0)
 			return true;
 
-		return false;
+			return false;
 		
 	}
 }
