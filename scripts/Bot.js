@@ -1,7 +1,7 @@
 var Player = require("./Player");
 var _ = require("underscore");
 var PathFinding = require("./PathFinding");
-var BehaviorTree = require('./BehaviourTree');
+var BehaviorTree = require('./BehaviorTree');
 class Bot extends Player {
 	constructor(width, height, color, x, y, gameArea) {
 		super(width, height, color, x, y, gameArea);
@@ -9,9 +9,11 @@ class Bot extends Player {
 		this.gridIndex = 0;
 		this.currentGrid = 0;
 		this.goalAngle = [-1 -1];
-		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index);
+ 		this.behaviorTree = new BehaviorTree();
+		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
+		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, goalIndex);
+		console.log(goalIndex);
  		this.path = this.pathFinding.visitedList;
- 		this.behaviorTree = new BehaviorTree(this.pathFinding);
  		//console.log("path: ");
  		/*for (var i = 0; i < this.path.length; i++) {
  			console.log(this.path[i].index);
@@ -145,6 +147,10 @@ class Bot extends Player {
 
 	   	if (this.path.length == 0) {
 	   		console.log("NÄMEN");
+	   		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
+	   		pathFinding.goalIndex = goalIndex;
+				this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+
 	   	}
 	   	if (this.currentGridSection.index == this.path[0].index) {
 	   		console.log("DUKTIG");
@@ -194,7 +200,6 @@ class Bot extends Player {
 		  	this.ctx.fillStyle = this.color;
 			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 			this.ctx.restore();
-			this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
 			this.currentGridSection.occupation++;
 			this.gameArea.largeGrid.getCurrentGridSection(this.position).occupation++;
 

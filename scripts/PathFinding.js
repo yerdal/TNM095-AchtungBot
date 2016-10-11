@@ -1,17 +1,16 @@
 
 class PathFinding {
-	constructor(grid, currentIndex) {
+	constructor(grid, currentIndex, goalIndex) {
 		this.currentGridSection = grid.sections[currentIndex];
 		this.currentIndex = currentIndex;
 		this.grid = grid;
-		this.setGoal();
+		// this.setGoal();
 		this.visitedList = [];
 		this.queue = [];
 		this.run();
+		this.goalIndex = goalIndex;
 	}
-	setGoal(index) {
-		this.goalIndex = 15;
-	}
+
 	addToQueue(obj) {
 		var found = false;
 		for (var i = 0; i < this.visitedList.length; i++) {
