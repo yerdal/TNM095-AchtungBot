@@ -48,6 +48,11 @@ class Grid {
 		}
 		return this.sections[index];
 	}
+
+	updateOccupation(){
+			
+	}
+
 	getGridSectionWithLeastOccupation() {
 		var leastOccupiedGrid = this.sections[0];
 
