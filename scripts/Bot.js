@@ -82,18 +82,34 @@ class Bot extends Player {
 
 			var opposite = goal + 180;
 			opposite = opposite % 360;
-			if(goal < 180) {
-				if (curAngle > opposite) {
-					this.moveAngle = 4;
-				} else {
+			if (goal == 0) {
+				if (curAngle < 180) {
 					this.moveAngle = -4;
 				}
-			} else {
-				if (curAngle > goal || curAngle < opposite) {
-					this.moveAngle = -4;
-				} else {
+				else
+					this.moveAngle = 4;
+			}
+			else if (goal == 90) {
+				if (curAngle < goal || curAngle > 270) {
 					this.moveAngle = 4;
 				}
+				else if (curAngle > goal && curAngle < 270) {
+					this.moveAngle = -4;
+				}
+			}
+			else if (goal == 180) {
+				if (curAngle < 180) {
+					this.moveAngle = 4;
+				}
+				else
+					this.moveAngle = -4;
+			}
+			else if (goal == 270) {
+				if (curAngle < 270 && curAngle > 90) {
+					this.moveAngle = 4;
+				}
+				else
+					this.moveAngle = -4;
 			}
 		}
 	}
@@ -101,6 +117,8 @@ class Bot extends Player {
 	checkAngle(angle) {
 		var answer = angle % (Math.PI*2);
 		answer = (answer * 180) / Math.PI;
+		if (answer < 0)
+			answer+=360;
 		return answer; 
 	}
 
@@ -135,28 +153,22 @@ class Bot extends Player {
 
 	   	else
 	   	{
-	   		/*console.log("Current index: " + this.currentGridSection.index);
-	   		console.log("Path: ");
-	   		console.log(this.path);*/
 	   		if(this.currentGridSection.index+1 == this.path[0].index) {
-				// go Right
-				console.log("right");
+				// go right
 				this.goalAngle[0] = 85;
 				this.goalAngle[1] = 95;
 			} else if(this.currentGridSection.index - 1 == this.path[0].index) {
-					// go Left
-					console.log("left");
+					// go left
 					this.goalAngle[0] = 265;
 					this.goalAngle[1] = 275;
+
 			} else if(this.currentGridSection.index + 9 == this.path[0].index) {
-					// go Down
-					console.log("down");
+					// go down
 					this.goalAngle[0] = 175;
 					this.goalAngle[1] = 185;
 
 			} else if(this.currentGridSection.index - 9 == this.path[0].index) {
-					// go Up
-					console.log("up");
+					// go up
 					this.goalAngle[0] = 355;
 					this.goalAngle[1] = 5;
 	   		}
