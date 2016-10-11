@@ -69,7 +69,7 @@ class PathFinding {
 
 
 	calcManhattan (a, b) {
-		var dist = Math.abs(Math.floor(a / 10) - Math.floor(b / 10)) + Math.abs(a % 10 - b % 10);
+		var dist = Math.abs(Math.floor(a / 9) - Math.floor(b / 9)) + Math.abs(a % 9 - b % 9);
 
 		return dist;
 	}
@@ -134,35 +134,35 @@ class PathFinding {
 		if (check == "FIRST_ROW_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 1);
-			adjSections.push(this.currentGridSection.index + 10);
+			adjSections.push(this.currentGridSection.index + 9);
 		}
 		else if (check == "LAST_ROW_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 1);
-			adjSections.push(this.currentGridSection.index - 10);
+			adjSections.push(this.currentGridSection.index - 9);
 		}
 		else if (check == "TOP_RIGHT_CORNER") {
 			adjSections.push(this.currentGridSection.index - 1);
-			adjSections.push(this.currentGridSection.index + 10);
+			adjSections.push(this.currentGridSection.index + 9);
 		}
 		else if (check == "TOP_LEFT_CORNER") {
 			adjSections.push(this.currentGridSection.index + 1);
-			adjSections.push(this.currentGridSection.index + 10);
+			adjSections.push(this.currentGridSection.index + 9);
 		}
 		else if (check == "BOTTOM_LEFT_CORNER") {
 			adjSections.push(this.currentGridSection.index + 1);
-			adjSections.push(this.currentGridSection.index - 10);
+			adjSections.push(this.currentGridSection.index - 9);
 		}
 		else if (check == "BOTTOM_RIGHT_CORNER") {
 			adjSections.push(this.currentGridSection.index - 1);
-			adjSections.push(this.currentGridSection.index - 10);
+			adjSections.push(this.currentGridSection.index - 9);
 		}
 		// middle
 		else {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 1);
-			adjSections.push(this.currentGridSection.index + 10);
-			adjSections.push(this.currentGridSection.index - 10);
+			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index - 9);
 		}
 		return adjSections;
 

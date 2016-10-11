@@ -148,13 +148,13 @@ class Bot extends Player {
 					console.log("left");
 					this.goalAngle[0] = 265;
 					this.goalAngle[1] = 275;
-			} else if(this.currentGridSection.index + 10 == this.path[0].index) {
+			} else if(this.currentGridSection.index + 9 == this.path[0].index) {
 					// go Down
 					console.log("down");
 					this.goalAngle[0] = 175;
 					this.goalAngle[1] = 185;
 
-			} else if(this.currentGridSection.index - 10 == this.path[0].index) {
+			} else if(this.currentGridSection.index - 9 == this.path[0].index) {
 					// go Up
 					console.log("up");
 					this.goalAngle[0] = 355;
