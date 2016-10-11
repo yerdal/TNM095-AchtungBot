@@ -12,15 +12,8 @@ class Bot extends Player {
  		this.behaviorTree = new BehaviorTree();
 		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, goalIndex);
-		console.log(goalIndex);
  		this.path = this.pathFinding.visitedList;
- 		//console.log("path: ");
- 		/*for (var i = 0; i < this.path.length; i++) {
- 			console.log(this.path[i].index);
- 		}*/
  		this.goal = this.path.pop();
- 		//console.log("start: " + this.gameArea.grid.getCurrentGridSection(this.position).index);
- 		//console.log("goal: " + this.goal.index);
 	}
 
 	decide(pixelVec, k) {
@@ -148,8 +141,10 @@ class Bot extends Player {
 	   	if (this.path.length == 0) {
 	   		console.log("NÄMEN");
 	   		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
-	   		pathFinding.goalIndex = goalIndex;
-				this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+	   		this.pathFinding.goalIndex = goalIndex;
+			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+			this.path = this.pathFinding.visitedList;
+
 
 	   	}
 	   	if (this.currentGridSection.index == this.path[0].index) {

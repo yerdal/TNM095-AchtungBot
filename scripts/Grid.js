@@ -51,13 +51,17 @@ class Grid {
 	getGridSectionWithLeastOccupation() {
 		var leastOccupiedGrid = this.sections[0];
 		let leastOccupiedArray = [];
-
+		var better = false;
 		for (let i = 1; i < this.sections.length; i++){
 			if(this.sections[i].occupation <= leastOccupiedGrid.occupation) {
 				leastOccupiedArray.push(this.sections[i]);
 				leastOccupiedGrid = this.sections[i];
+				better = true;
 			}
 		}
+		if (!better)
+			leastOccupiedArray.push(leastOccupiedGrid);
+		
 		return leastOccupiedArray;
 	}
 }

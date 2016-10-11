@@ -4,11 +4,11 @@ class PathFinding {
 		this.currentGridSection = grid.sections[currentIndex];
 		this.currentIndex = currentIndex;
 		this.grid = grid;
-		// this.setGoal();
 		this.visitedList = [];
 		this.queue = [];
-		this.run();
 		this.goalIndex = goalIndex;
+		this.run();
+
 	}
 
 	addToQueue(obj) {
