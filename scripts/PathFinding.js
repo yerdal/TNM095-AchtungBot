@@ -10,8 +10,8 @@ class PathFinding {
 		this.queue = [];
 		this.run();
 	}
-	setGoal() {
-		this.goalIndex = 15;
+	setGoal(index) {
+		this.goalIndex = index;
 	}
 	addToQueue(obj) {
 		var found = false;

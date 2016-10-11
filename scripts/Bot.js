@@ -11,7 +11,7 @@ class Bot extends Player {
 		this.goalAngle = [-1 -1];
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index);
  		this.path = this.pathFinding.visitedList;
- 		this.behaviorTree = new BehaviorTree();
+ 		this.behaviorTree = new BehaviorTree(this.pathFinding);
  		//console.log("path: ");
  		/*for (var i = 0; i < this.path.length; i++) {
  			console.log(this.path[i].index);
@@ -145,10 +145,9 @@ class Bot extends Player {
 		  	this.ctx.fillStyle = this.color;
 			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 			this.ctx.restore();
-			this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation());
+			this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
 			this.currentGridSection.occupation++;
 			this.gameArea.largeGrid.getCurrentGridSection(this.position).occupation++;
-
 
 		} else {
 			this.hole--;

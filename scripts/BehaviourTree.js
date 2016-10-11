@@ -1,10 +1,16 @@
 const TURN_RIGHT = 4;
 const TURN_LEFT = -4;
+
+
 class BehaviourTree {
-	constructor (){
+	constructor (pathFinding){
+		this.pathFinding = pathFinding;
 	}
-	getBehavior(currentGrid, bestGrid) {
-		console.log("Behave", bestGrid.index);
+	getBehavior(currentGrid, bestGrid, botPosition) {
+		//console.log("Behave", bestGrid);
+		let nearestEmptyIndex = this.getNearestIndex(bestGrid, botPosition);	
+		
+
 		/*switch(currentGrid) {
 			case 0:
 				break;
@@ -26,6 +32,22 @@ class BehaviourTree {
 				break;
 		}*/
 
+	}
+
+	getNearestIndex(bestGrid, botPosition){
+		let bestSection = bestGrid[0]; 
+
+		let bestValue = Math.abs(bestSection.centerX - botPosition.x) + Math.abs(bestSection.centerY - botPosition.y);
+		let newValue;
+		for (var i = 1; i < bestGrid.length; i++) {
+			newValue = Math.abs(bestGrid[i].centerX - botPosition.y) + Math.abs(bestGrid[i].centerY - botPosition.y);
+			if(bestValue > newValue){
+				bestValue = newValue;
+				bestSection = bestGrid[i];
+			}
+		}
+		//console.log("bestIndex", best.index);
+		return bestSection;
 	}
 }
 
