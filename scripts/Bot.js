@@ -79,7 +79,7 @@ class Bot extends Player {
 
 	newPos() {
 		var x1, x2, y1, y2;
-	   	var newAngle = this.moveAngle * Math.PI / 180; 	
+	   	var newAngle = this.moveAngle * Math.PI / 180;
 	   	this.angle += this.moveAngle * Math.PI / 180;
 	   	y1 = this.position.y;
 	   	x1 = this.position.x;
