@@ -75,54 +75,6 @@ class Bot extends Player {
 		return answer; 
 	}
 
-	// goRight() {
-	// 	console.log("Jag vill åt höger!");
-	// 	console.log(this.angle);
-	// 	let curAngle = this.checkAngle(this.angle);
-	// 	if (curAngle < 180) {
-	// 		do {
-	// 			this.moveAngle = -4;
-	// 		} while (curAngle > 5 && checkAngle(curAngle < 0));
-	// 	} else {
-	// 					do {
-	// 			this.moveAngle = 4;
-	// 		} while (curAngle > 5 && curAngle < 0);
-	// 	}
-	// }
-
-	// goLeft() {
-	// 	console.log("VÄNSTER!");
-	// 	console.log(this.angle);
-	// 	let curAngle = this.checkAngle(this.angle);
-	// 	if (curAngle < 180) {
-	// 		this.moveAngle = 4;
-	// 	} else {
-	// 		this.moveAngle = -4;
-	// 	}
-	// }
-
-	// goUp() {
-	// 	console.log("Uppåt kanske?");
-	// 	console.log(this.angle);
-	// 	let curAngle = this.checkAngle(this.angle);
-	// 	if (curAngle < 90 || curAngle > 270) {
-	// 		this.moveAngle = 4;
-	// 	} else {
-	// 		this.moveAngle = -4;
-	// 	}
-	// }
-
-	// goDown() {
-	// 	console.log("Lets get down tonight!");
-	// 	console.log(this.angle);
-	// 	let curAngle = this.checkAngle(this.angle);
-	// 	if (curAngle < 90 || curAngle > 270) {
-	// 		this.moveAngle = -4;
-	// 	} else {
-	// 		this.moveAngle = 4;
-	// 	}
-	// }
-
 	newPos() {
 		var x1, x2, y1, y2;
 	   	var newAngle = this.moveAngle * Math.PI / 180; 	
@@ -147,13 +99,7 @@ class Bot extends Player {
 	   	this.decide(pixelVec, k);
 	   	this.checkCollisions();
 	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
-	   	/*console.log("anim: " + this.currentGridSection.index);
-	   	console.log("next: " + this.pathFinding.currentGridSection.index);*/
-	   //	this.pathFinding.run();
-	   //	this.pathFinding.run(this.currentGridSection);
-	   	/*var kNew = (this.pathFinding.currentGridSection.centerY - this.position.y) / 
-	   	(this.pathFinding.currentGridSection.centerX - this.position.x);
-	   	this.goToNextGridSection(kNew);*/
+
 	   	if (this.path.length == 0) {
 	   		console.log("NÄMEN");
 	   	}
@@ -161,6 +107,7 @@ class Bot extends Player {
 	   		console.log("DUKTIG");
 	   		this.path.shift();
 	   	}
+
 	   	else
 	   	{
 	   		if(this.currentGridSection.index+1 == this.path[0].index) {

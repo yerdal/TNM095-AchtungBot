@@ -34,12 +34,7 @@ class Grid {
 		firstLoop:
 		for(var y = 1; y <= this.size; y++){
 			for (var x = 1; x <= this.size; x++) {
-				/*console.log("pos x: " + position.x);
-				console.log("ind x: " + this.width * x);
-				console.log("pos y: " + position.y);
-				console.log("ind y: " + this.height * y);*/
 				if(position.x <= (this.width * x) && position.y <= (this.height*y)){
-					//console.log("HEJSS");
 					index = counter;
 					break firstLoop;
 				}

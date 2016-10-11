@@ -1,4 +1,3 @@
-var PriorityQueue = require("js-priority-queue");
 
 class PathFinding {
 	constructor(grid, currentIndex, parent) {
