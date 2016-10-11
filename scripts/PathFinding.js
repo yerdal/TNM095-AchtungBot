@@ -81,52 +81,31 @@ class PathFinding {
 		if (i == 0) {
 			position = "TOP_LEFT_CORNER";
 		}
-		else if (i == 9) {
+		else if (i == 8) {
 			position = "TOP_RIGHT_CORNER";
 		}
-		else if (i == 90) {
+		else if (i == 72) {
 			position = "BOTTOM_LEFT_CORNER";
 		}
-		else if (i == 99) {
+		else if (i == 81) {
 			position = "BOTTOM_RIGHT_CORNER";
 		}
-		else if (i > 0 && i < 9) {
+		else if (i > 0 && i < 8) {
 			position = "FIRST_ROW_NO_CORNERS";
 		}
-		else if (i > 10 && i < 19) {
-			position = "MIDDLE";
-		}
-		else if (i > 20 && i <29) {
-			position = "MIDDLE";
-		}
-		else if (i > 30 && i < 39) {
-			position = "MIDDLE";
-
-		}
-		else if (i >  40 && i < 49) {
-			position = "MIDDLE";
-
-		}
-		else if (i > 50 && i < 59) {
-			position = "MIDDLE";
-
-		}
-		else if (i > 60 && i < 69) {
-			position = "MIDDLE";
-
-		}
-		else if (i > 70 && i <= 79) {
-			position = "MIDDLE";
-
-		}
-		else if (i > 80 && i < 89) {
-			position = "MIDDLE";
-
-		}
-		else if (i > 90 && i < 99) {
+		else if (i > 72 && i < 81) {
 			position = "LAST_ROW_NO_CORNERS";
-
 		}
+		else if(i % 9 == 0 && i != 72 && i != 0) {
+			position = "FIRST_COLUMN_NO_CORNERS";
+		}
+		else if(i % 9 == 8 && i != 8 && i != 81) {
+			position = "LAST_COLUMN_NO_CORNERS"
+		}
+		else {
+			position = "MIDDLE";
+		}
+	
 		return position;
 	}
 	setAdjacentSections(check) {
@@ -157,6 +136,16 @@ class PathFinding {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index - 9);
 		}
+		else if(check == "FIRST_COLUMN_NO_CORNERS") {
+			adjSections.push(this.currentGridSection.index + 1);
+			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index + 9);
+		}
+		else if(check == "LAST_COLUMN_NO_CORNERS") {
+			adjSections.push(this.currentGridSection.index - 1);
+			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index + 9);
+		}
 		// middle
 		else {
 			adjSections.push(this.currentGridSection.index + 1);
@@ -167,7 +156,6 @@ class PathFinding {
 		return adjSections;
 
 	}
-
 }
 
 module.exports = PathFinding;
