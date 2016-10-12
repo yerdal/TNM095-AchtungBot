@@ -11,10 +11,12 @@ class Bot extends Player {
 		this.goalAngle = [-1 -1];
  		this.behaviorTree = new BehaviorTree();
 
-		var goalIndex = this.behaviorTree.surviveBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
+		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.gameArea.grid, this.position, player.position);
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, goalIndex);
  		this.path = this.pathFinding.visitedList;
  		this.goal = this.path.pop();
+ 		//this.behaviorTree.getLineBetween(this.position, player.position, this.angle, player.angle, this.gameArea.context);
+
 	}
 
 	decide(pixels) {
@@ -118,12 +120,12 @@ class Bot extends Player {
 
 	   	if (this.path.length == 0) {
 	   		console.log("NÄMEN");
-	   		var goalIndex = this.behaviorTree.surviveBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
+	   		console.log("player pos: ");
+	   		console.log(this.player.position);
+	   		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.gameArea.grid, this.position, this.player.position);
 	   		this.pathFinding.goalIndex = goalIndex;
 			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
 			this.path = this.pathFinding.visitedList;
-
-
 	   	}
 	   	if (this.currentGridSection.index == this.path[0].index) {
 	   		this.path.shift();
@@ -164,10 +166,7 @@ class Bot extends Player {
 	   		var pixelColors = _.reduce(this.ctx.getImageData(newPos.x, newPos.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
 	   		pixelVec.push(pixelColors);
 	   	}
-	   /*	this.ctx.beginPath();
-	   	this.ctx.moveTo(this.position.x, this.position.y);
-	   	this.ctx.lineTo(newPos.x, newPos.y);
-	   	this.ctx.stroke();*/
+
 	   	var pixels = _.reduce(pixelVec, function(memo, num) { return memo + num}, 0);
 	   	this.decide(pixels);
 	   	this.checkCollisions();
@@ -185,7 +184,6 @@ class Bot extends Player {
 			this.ctx.restore();
 			this.currentGridSection.occupation++;
 			this.gameArea.largeGrid.getCurrentGridSection(this.position).occupation++;
-			this.behaviorTree.attackBehavior(this.player.position, this.position);
 
 		} else {
 			this.hole--;
