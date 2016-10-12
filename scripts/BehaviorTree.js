@@ -39,8 +39,8 @@ class BehaviorTree {
 	}
 
 	attackBehavior(playerPosition, botPosition){
-		console.log("playerpos", playerPosition);
-		console.log("botpos", botPosition);
+		//console.log("playerpos", playerPosition);
+		//console.log("botpos", botPosition);
 
 	}
 
