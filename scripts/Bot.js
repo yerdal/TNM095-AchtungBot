@@ -16,20 +16,17 @@ class Bot extends Player {
  		this.goal = this.path.pop();
 	}
 
-	decide(pixelVec, k) {
+	decide(pixels, k) {
 		var white = true;
-		for (var i = 0; i < pixelVec.length; i++) {
-			if (pixelVec[i] != 0) {
-					this.moveAngle = 4;
-					white = false;
-					break;
-			}
+		if (pixels != 0) {
+			this.moveAngle = 4;
+			white = false;
 		}
-		if (white) {
+		else if (white) {
 			this.moveAngle = 0;
-		}
-		if (this.goalAngle[0] != -1) {
-			this.goToGoalAngle();
+			if (this.goalAngle[0] != -1) {
+				this.goToGoalAngle();
+			}
 		}
 	}
 	goToNextGridSection(k) {
@@ -129,6 +126,7 @@ class Bot extends Player {
 	   	y2 = this.position.y;
 	   	var k = (y2-y1)/(x2-x1);
 	   	var pixelVec = [];
+	   	var pixels = 0;
 	   	// check if new obstacle
 	   	var newPos = {};
 
@@ -180,7 +178,8 @@ class Bot extends Player {
 	   		var pixelColors = _.reduce(this.ctx.getImageData(newPos.x, newPos.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
 	   		pixelVec.push(pixelColors);
 	   	}
-	   	this.decide(pixelVec, k);
+	   	var pixels = _.reduce(pixelVec, function(memo, num) { return memo + num}, 0);
+	   	this.decide(pixels, k);
 	   	this.checkCollisions();
 
 	   	this.update();	   	
