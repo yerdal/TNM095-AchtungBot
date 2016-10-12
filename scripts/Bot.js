@@ -140,7 +140,7 @@ class Bot extends Player {
 	   		this.path = this.pathFinding.visitedList;
 	   	}
 	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
-
+	   	// if pathfinding done
 	   	if (this.path.length == 0) {
 
 	   		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.gameArea.grid, this.position, this.player.position);
@@ -148,32 +148,14 @@ class Bot extends Player {
 			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
 			this.path = this.pathFinding.visitedList;
 	   	}
-
+	   	// if part of pathfinding done
 	   	if (this.currentGridSection.index == this.path[0].index) {
 	   		this.path.shift();
 	   	}
-
+	   	// if moving to new index
 	   	else
 	   	{
-	   		if(this.currentGridSection.index+1 == this.path[0].index) {
-				// go right
-				this.goalAngle[0] = 85;
-				this.goalAngle[1] = 95;
-			} else if(this.currentGridSection.index - 1 == this.path[0].index) {
-					// go left
-					this.goalAngle[0] = 265;
-					this.goalAngle[1] = 275;
-
-			} else if(this.currentGridSection.index + 9 == this.path[0].index) {
-					// go down
-					this.goalAngle[0] = 175;
-					this.goalAngle[1] = 185;
-
-			} else if(this.currentGridSection.index - 9 == this.path[0].index) {
-					// go up
-					this.goalAngle[0] = 355;
-					this.goalAngle[1] = 5;
-	   		}
+	   		this.setGoalAngle();
 	   	}
 	   	this.angle += this.moveAngle * Math.PI / 180;
 	   	this.position.x += this.speed * Math.sin(this.angle);
@@ -185,7 +167,6 @@ class Bot extends Player {
 
 	   	this.update();
 	}
-
 	movementDecider() {
 		var forwardPixelVec = [];
 	   	var rightPixelVec = [];
@@ -212,6 +193,27 @@ class Bot extends Player {
 
 		forwardPixels = _.reduce(forwardPixelVec, function(memo, num) { return memo + num}, 0);
 		this.decide(forwardPixels, rightPixelVec, leftPixelVec);
+	}
+	setGoalAngle() {
+		if(this.currentGridSection.index+1 == this.path[0].index) {
+				// go right
+				this.goalAngle[0] = 85;
+				this.goalAngle[1] = 95;
+			} else if(this.currentGridSection.index - 1 == this.path[0].index) {
+					// go left
+					this.goalAngle[0] = 265;
+					this.goalAngle[1] = 275;
+
+			} else if(this.currentGridSection.index + 9 == this.path[0].index) {
+					// go down
+					this.goalAngle[0] = 175;
+					this.goalAngle[1] = 185;
+
+			} else if(this.currentGridSection.index - 9 == this.path[0].index) {
+					// go up
+					this.goalAngle[0] = 355;
+					this.goalAngle[1] = 5;
+	   		}
 	}
 	
 }
