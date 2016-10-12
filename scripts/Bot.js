@@ -158,14 +158,14 @@ class Bot extends Player {
 					this.goalAngle[1] = 5;
 	   		}
 	   	}
-	   	var newAngle = this.moveAngle * Math.PI / 180;
-	   	this.angle += this.moveAngle * Math.PI / 180;
-	   	y1 = this.position.y;
-	   	x1 = this.position.x;
+	   	   	var newAngle = this.moveAngle * Math.PI / 180;
+	   	   	this.angle += this.moveAngle * Math.PI / 180;
+	   	var y1 = this.position.y;
+	   	var x1 = this.position.x;
 	   	this.position.x += this.speed * Math.sin(this.angle);
 	   	this.position.y -= this.speed * Math.cos(this.angle);
-	   	x2 = this.position.x;
-	   	y2 = this.position.y;
+	   	var x2 = this.position.x;
+	   	var y2 = this.position.y;
 	   	var k = (y2-y1)/(x2-x1);
 	   	var pixelVec = [];
 	   	   	// check if new obstacle
