@@ -15,15 +15,52 @@ class Bot extends Player {
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, goalIndex);
  		this.path = this.pathFinding.visitedList;
  		this.goal = this.path.pop();
+ 		this.collisionEvader = 0;
+ 		this.dodgeTimer = 0;
 	}
 
-	decide(pixels) {
-		var white = true;
-		if (pixels != 0) {
-			this.moveAngle = 6;
-			white = false;
+	decide(forwardPixels, rightPixelVec, leftPixelVec) {
+		var white = 0;
+		if (forwardPixels != 0) {
+			console.log("KROCK PÅ G!!");
+			if (white == 1) {
+				this.moveAngle = -4;
+				white = 1;
+				this.collisionEvader = 1;
+				this.dodgeTimer = 50;
+			} else if (white == 2) {
+				this.moveAngle = 4;
+				this.collisionEvader = 2;
+				this.dodgeTimer = 50;
+				white = 2;
+			} 
+			else {
+				if (this.collisionEvader == 1 && this.dodgeTimer > 0) {
+					this.moveAngle = 4;
+					this.dodgeTimer--;
+				} else if (this.collisionEvader == 2 && this.dodgeTimer > 0) {
+					this.moveAngle = -4;
+					this.dodgeTimer--;
+				}
+				else {					
+					for (var i = 0; i < rightPixelVec.length; i++) {
+						if (rightPixelVec[i] != 0) {
+							console.log("SVÄNG VÄNSTER!");
+							this.moveAngle = -4; 
+							white = 1;
+							break;
+						} 
+						else if (leftPixelVec[i] != 0) {
+							console.log("liiite mer åt höger");
+							this.moveAngle = 4;
+							white = 2;
+							break;
+						}
+					}
+				}
+			}
 		}
-		else if (white) {
+		else if (white == 0) {
 			this.moveAngle = 0;
 			if (this.goalAngle[0] != -1) {
 				this.goToGoalAngle();
@@ -109,7 +146,6 @@ class Bot extends Player {
 	}
 
 	newPos() {
-
 	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index) {
 	   		this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
 	   		this.path = this.pathFinding.visitedList;
@@ -120,12 +156,12 @@ class Bot extends Player {
 	   		console.log("NÄMEN");
 	   		var goalIndex = this.behaviorTree.surviveBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
 	   		this.pathFinding.goalIndex = goalIndex;
-			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
-			this.path = this.pathFinding.visitedList;
-
-
+				this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+				this.path = this.pathFinding.visitedList;
 	   	}
+
 	   	if (this.currentGridSection.index == this.path[0].index) {
+	   		// console.log("DUKTIG");
 	   		this.path.shift();
 	   	}
 
@@ -156,22 +192,38 @@ class Bot extends Player {
 	   	this.position.y -= this.speed * Math.cos(this.angle);
 
 	   	
-	   	var pixelVec = [];
-	   	var newPos = {x: 0, y: 0};
-	   	for (var i = 0; i < 60; i++) {
-	   		newPos.x =  this.position.x + Math.sin(this.angle)*i;
-	   		newPos.y =  this.position.y - Math.cos(this.angle)*i;
-	   		var pixelColors = _.reduce(this.ctx.getImageData(newPos.x, newPos.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
-	   		pixelVec.push(pixelColors);
-	   	}
-	   /*	this.ctx.beginPath();
-	   	this.ctx.moveTo(this.position.x, this.position.y);
-	   	this.ctx.lineTo(newPos.x, newPos.y);
-	   	this.ctx.stroke();*/
-	   	var pixels = _.reduce(pixelVec, function(memo, num) { return memo + num}, 0);
-	   	this.decide(pixels);
+	   	this.movementDecider();
 	   	this.checkCollisions();
 	   	this.update();
+	}
+
+	movementDecider() {
+		var forwardPixelVec = [];
+   	var rightPixelVec = [];
+   	var leftPixelVec = [];
+   	var forwardPixels, forwardPixelColors, rightPixelColors, leftPixelColors;
+   	var forwardCheck = {};
+   	var rightCheck = {};
+   	var leftCheck = {};
+
+		for (var i = 0; i < 60; i++) {
+			forwardCheck.x =  this.position.x + Math.sin(this.angle)*i;
+			forwardCheck.y =  this.position.y - Math.cos(this.angle)*i;
+			rightCheck.x = this.position.x + Math.sin(this.angle+(Math.PI/8))*i;
+			rightCheck.y = this.position.y - Math.cos(this.angle+(Math.PI/8))*i;
+			leftCheck.x = this.position.x + Math.sin(this.angle-(Math.PI/8))*i;
+			leftCheck.y = this.position.y - Math.cos(this.angle-(Math.PI/8))*i;
+
+			forwardPixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x, forwardCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
+			rightPixelColors = _.reduce(this.ctx.getImageData(rightCheck.x, rightCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
+			leftPixelColors = _.reduce(this.ctx.getImageData(leftCheck.x, leftCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
+			forwardPixelVec.push(forwardPixelColors);
+			rightPixelVec.push(rightPixelColors);
+			leftPixelVec.push(leftPixelColors);
+		}
+
+		forwardPixels = _.reduce(forwardPixelVec, function(memo, num) { return memo + num}, 0);
+		this.decide(forwardPixels, rightPixelVec, leftPixelVec);
 	}
 
 	update() {
@@ -180,7 +232,7 @@ class Bot extends Player {
 			this.ctx.save();
 			this.ctx.translate(this.position.x, this.position.y);
 			this.ctx.rotate(this.angle);
-		  	this.ctx.fillStyle = this.color;
+		  this.ctx.fillStyle = this.color;
 			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
 			this.ctx.restore();
 			this.currentGridSection.occupation++;
