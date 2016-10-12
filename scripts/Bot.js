@@ -15,11 +15,10 @@ class Bot extends Player {
  		this.goal = this.path.pop();
 	}
 
-	decide(pixels, k) {
+	decide(pixels) {
 		var white = true;
 		if (pixels != 0) {
-			console.log("tju")
-			this.moveAngle = 4;
+			this.moveAngle = 6;
 			white = false;
 		}
 		else if (white) {
@@ -28,13 +27,6 @@ class Bot extends Player {
 				this.goToGoalAngle();
 			}
 		}
-	}
-	goToNextGridSection(k) {
-		/*this.position.x += this.speed* + Math.cos(Math.atan(k));
-		this.position.y-= this.speed * + Math.sin(Math.atan(k));*/
-		this.angle= Math.atan(k);
-		this.position.x += this.speed * Math.sin(this.angle*2);
-		this.position.y -= this.speed * Math.cos(this.angle*2);
 	}
 
 	goToGoalAngle() {
@@ -123,7 +115,6 @@ class Bot extends Player {
 	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
 
 	   	if (this.path.length == 0) {
-	   		console.log("NÄMEN");
 	   		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
 	   		this.pathFinding.goalIndex = goalIndex;
 			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
@@ -132,7 +123,6 @@ class Bot extends Player {
 
 	   	}
 	   	if (this.currentGridSection.index == this.path[0].index) {
-	   		console.log("DUKTIG");
 	   		this.path.shift();
 	   	}
 
@@ -158,29 +148,27 @@ class Bot extends Player {
 					this.goalAngle[1] = 5;
 	   		}
 	   	}
-	   	   	var newAngle = this.moveAngle * Math.PI / 180;
-	   	   	this.angle += this.moveAngle * Math.PI / 180;
-	   	var y1 = this.position.y;
-	   	var x1 = this.position.x;
+	   	this.angle += this.moveAngle * Math.PI / 180;
 	   	this.position.x += this.speed * Math.sin(this.angle);
 	   	this.position.y -= this.speed * Math.cos(this.angle);
-	   	var x2 = this.position.x;
-	   	var y2 = this.position.y;
-	   	var k = (y2-y1)/(x2-x1);
+
+	   	
 	   	var pixelVec = [];
-	   	   	// check if new obstacle
-	   	var newPos = {};
-	   	for (var i = 0; i < 40; i++) {
-	   		newPos.x = this.position.x + Math.cos(Math.atan(k))*i;
-	   		newPos.y = this.position.y + Math.sin(Math.atan(k))*i;
+	   	var newPos = {x: 0, y: 0};
+	   	for (var i = 0; i < 60; i++) {
+	   		newPos.x =  this.position.x + Math.sin(this.angle)*i;
+	   		newPos.y =  this.position.y - Math.cos(this.angle)*i;
 	   		var pixelColors = _.reduce(this.ctx.getImageData(newPos.x, newPos.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
 	   		pixelVec.push(pixelColors);
 	   	}
+	   /*	this.ctx.beginPath();
+	   	this.ctx.moveTo(this.position.x, this.position.y);
+	   	this.ctx.lineTo(newPos.x, newPos.y);
+	   	this.ctx.stroke();*/
 	   	var pixels = _.reduce(pixelVec, function(memo, num) { return memo + num}, 0);
-	   	this.decide(pixels, k);
+	   	this.decide(pixels);
 	   	this.checkCollisions();
-
-	   	this.update();	   	
+	   	this.update();
 	}
 
 	update() {
