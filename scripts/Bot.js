@@ -26,16 +26,20 @@ class Bot extends Player {
 				this.moveAngle = -4;
 				white = 1;
 				this.collisionEvader = 1;
+				this.dodgeTimer = 50;
 			} else if (white == 2) {
 				this.moveAngle = 4;
 				this.collisionEvader = 2;
+				this.dodgeTimer = 50;
 				white = 2;
 			} 
 			else {
-				if (this.collisionEvader == 1) {
+				if (this.collisionEvader == 1 && this.dodgeTimer > 0) {
 					this.moveAngle = 4;
-				} else if (this.collisionEvader == 2) {
+					this.dodgeTimer--;
+				} else if (this.collisionEvader == 2 && this.dodgeTimer > 0) {
 					this.moveAngle = -4;
+					this.dodgeTimer--;
 				}
 				else {					
 					for (var i = 0; i < rightPixelVec.length; i++) {
