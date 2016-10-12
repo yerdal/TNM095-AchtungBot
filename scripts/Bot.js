@@ -57,11 +57,17 @@ class Bot extends Player {
 				}
 			}
 		}
-		else if (white == 0) {
+		/*else if (white == 0) {
 			this.moveAngle = 0;
 			if (this.goalAngle[0] != -1) {
 				this.goToGoalAngle();
 			}
+		}*/
+	}
+	proceedToGoal() {
+		this.moveAngle = 0;
+		if (this.goalAngle[0] != -1) {
+			this.goToGoalAngle();
 		}
 	}
 
@@ -179,20 +185,28 @@ class Bot extends Player {
 		for (var i = 0; i < 40; i++) {
 			forwardCheck.x =  this.position.x + Math.sin(this.angle)*i;
 			forwardCheck.y =  this.position.y - Math.cos(this.angle)*i;
-			rightCheck.x = this.position.x + Math.sin(this.angle+(Math.PI/8))*i;
-			rightCheck.y = this.position.y - Math.cos(this.angle+(Math.PI/8))*i;
-			leftCheck.x = this.position.x + Math.sin(this.angle-(Math.PI/8))*i;
-			leftCheck.y = this.position.y - Math.cos(this.angle-(Math.PI/8))*i;
 			forwardPixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x, forwardCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
-			rightPixelColors = _.reduce(this.ctx.getImageData(rightCheck.x, rightCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
-			leftPixelColors = _.reduce(this.ctx.getImageData(leftCheck.x, leftCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
 			forwardPixelVec.push(forwardPixelColors);
-			rightPixelVec.push(rightPixelColors);
-			leftPixelVec.push(leftPixelColors);
 		}
 
 		forwardPixels = _.reduce(forwardPixelVec, function(memo, num) { return memo + num}, 0);
-		this.decide(forwardPixels, rightPixelVec, leftPixelVec);
+		if (forwardPixels != 0) {
+			for (var i = 0; i < 40; i++) {
+				rightCheck.x = this.position.x + Math.sin(this.angle+(Math.PI/8))*i;
+				rightCheck.y = this.position.y - Math.cos(this.angle+(Math.PI/8))*i;
+				leftCheck.x = this.position.x + Math.sin(this.angle-(Math.PI/8))*i;
+				leftCheck.y = this.position.y - Math.cos(this.angle-(Math.PI/8))*i;
+				rightPixelColors = _.reduce(this.ctx.getImageData(rightCheck.x, rightCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
+				leftPixelColors = _.reduce(this.ctx.getImageData(leftCheck.x, leftCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
+				rightPixelVec.push(rightPixelColors);
+				leftPixelVec.push(leftPixelColors);
+			}
+			this.decide(forwardPixels, rightPixelVec, leftPixelVec);
+		}
+		else {
+			this.proceedToGoal();
+		}
+
 	}
 	setGoalAngle() {
 		if(this.currentGridSection.index+1 == this.path[0].index) {
