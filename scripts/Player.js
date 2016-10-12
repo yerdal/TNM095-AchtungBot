@@ -32,7 +32,7 @@ class Player {
 			this.ctx.translate(this.position.x, this.position.y);
 			this.ctx.rotate(this.angle);
 		  	this.ctx.fillStyle = this.color;
-			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
+			this.ctx.fillRect(this.width/2, this.height/2, this.width, this.height);
 			this.ctx.restore();
 			this.gameArea.grid.getCurrentGridSection(this.position).occupation++;
 			this.gameArea.largeGrid.getCurrentGridSection(this.position).occupation++;
@@ -62,6 +62,7 @@ class Player {
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 	    var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
+
 	    this.checkCollisions();
 	    this.update();
 	}
@@ -98,10 +99,40 @@ class Player {
 			this.position.y = canvasHeight;
 		}
 	}
-
-	checkWormCollision() {
-	  var pixelColors = _.reduce(this.ctx.getImageData(this.position.x, this.position.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
+	checkAngle(angle) {
+		var answer = angle % (Math.PI*2);
+		answer = (answer * 180) / Math.PI;
+		if (answer < 0)
+			answer+=360;
+		return answer; 
+	}
+	checkWormCollision() {	
+		var pixelColors;
+		var forwardCheck = {x: 0, y: 0};
+		forwardCheck.x =  this.position.x + Math.sin(this.angle)*2;
+		forwardCheck.y =  this.position.y - Math.cos(this.angle)*2;
+		if ((this.checkAngle(this.angle) >= 0 && this.checkAngle(this.angle) <=90)) {
+			//this.ctx.fillRect(this.position.x+ this.width/2, this.position.y + this.height/2, 3, 3);
+			pixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x + this.width/2, forwardCheck.y + this.height/2, 1, 1)
+				.data, function(memo, num) { return memo + num; }, 0);
+		}
+		else if (this.checkAngle(this.angle) > 90 && this.checkAngle(this.angle) <= 180) {
+			//this.ctx.fillRect(this.position.x - this.width/2, this.position.y + this.height/2, -3, 3);
+			pixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x - this.width/2, forwardCheck.y + this.height/2, -1, 1)
+				.data, function(memo, num) { return memo + num; }, 0);
+		}
+		else if (this.checkAngle(this.angle) > 180 && this.checkAngle(this.angle) <= 270) {
+			//this.ctx.fillRect(this.position.x- this.width/2, this.position.y - this.height/2, -3, -3);
+			pixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x - this.width/2, forwardCheck.y - this.height/2, -1, -1)
+				.data, function(memo, num) { return memo + num; }, 0);
+		}
+		else {
+			//this.ctx.fillRect(this.position.x+this.width/2, this.position.y + this.height/2, 3, -3);
+			pixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x + this.width/2, forwardCheck.y + this.height/2, 1, -1)
+				.data, function(memo, num) { return memo + num; }, 0);
+		}
 		if (pixelColors != 0) {
+			console.log("CHECK");
 			this.isDead = true;
 		}
 	}

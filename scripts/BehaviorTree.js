@@ -2,15 +2,16 @@ const TURN_RIGHT = 4;
 const TURN_LEFT = -4;
 
 class BehaviorTree {
-	behavior(bestGrid, grid, botPosition, playerPosition){
-		return this.attackBehavior(playerPosition, grid);
+	behavior(bestLargeGridSections, grid, botPosition, playerPosition){
+		//return this.attackBehavior(playerPosition, grid);
+
+		return this.surviveBehavior(bestLargeGridSections, botPosition);
 	}
 
 
-	surviveBehavior(bestGrid, botPosition) {
-		//console.log("Behave", bestGrid);
+	surviveBehavior(bestLargeGridSections, botPosition) {
 		var mappedIndex;
-		let nearestEmptyIndex = this.getNearestIndex(bestGrid, botPosition);
+		let nearestEmptyIndex = this.getNearestIndex(bestLargeGridSections, botPosition);
 		if(nearestEmptyIndex.index == 0) {
 			mappedIndex = 10;
 		} else if(nearestEmptyIndex.index == 1) {
@@ -34,22 +35,19 @@ class BehaviorTree {
 	}
 
 	attackBehavior(playerPosition, grid){
-		console.log(grid.getCurrentGridSection(playerPosition));
 		return grid.getCurrentGridSection(playerPosition).index;
-		//console.log("playerpos", playerPosition);
-		//console.log("botpos", botPosition);
 	}
 
-	getNearestIndex(bestGrid, botPosition){
-		let bestSection = bestGrid[0]; 
+	getNearestIndex(bestLargeGridSections, botPosition){
+		let bestSection = bestLargeGridSections[0]; 
 
 		let bestValue = Math.abs(bestSection.centerX - botPosition.x) + Math.abs(bestSection.centerY - botPosition.y);
 		let newValue;
-		for (var i = 1; i < bestGrid.length; i++) {
-			newValue = Math.abs(bestGrid[i].centerX - botPosition.y) + Math.abs(bestGrid[i].centerY - botPosition.y);
+		for (var i = 1; i < bestLargeGridSections.length; i++) {
+			newValue = Math.abs(bestLargeGridSections[i].centerX - botPosition.y) + Math.abs(bestLargeGridSections[i].centerY - botPosition.y);
 			if(bestValue > newValue){
 				bestValue = newValue;
-				bestSection = bestGrid[i];
+				bestSection = bestLargeGridSections[i];
 			}
 		}
 		//console.log("bestIndex", best.index);

@@ -11,7 +11,7 @@ class Bot extends Player {
 		this.goalAngle = [-1 -1];
  		this.behaviorTree = new BehaviorTree();
 
-		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.gameArea.grid, this.position, player.position);
+		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.gameArea.grid, this.position, player.position);
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, goalIndex);
  		this.path = this.pathFinding.visitedList;
  		this.goal = this.path.pop();
@@ -22,36 +22,29 @@ class Bot extends Player {
 	decide(forwardPixels, rightPixelVec, leftPixelVec) {
 		var white = 0;
 		if (forwardPixels != 0) {
-			console.log("KROCK PÅ G!!");
 			if (white == 1) {
 				this.moveAngle = -4;
 				white = 1;
 				this.collisionEvader = 1;
-				this.dodgeTimer = 50;
 			} else if (white == 2) {
 				this.moveAngle = 4;
 				this.collisionEvader = 2;
-				this.dodgeTimer = 50;
 				white = 2;
 			} 
 			else {
-				if (this.collisionEvader == 1 && this.dodgeTimer > 0) {
+				if (this.collisionEvader == 1) {
 					this.moveAngle = 4;
-					this.dodgeTimer--;
-				} else if (this.collisionEvader == 2 && this.dodgeTimer > 0) {
+				} else if (this.collisionEvader == 2) {
 					this.moveAngle = -4;
-					this.dodgeTimer--;
 				}
 				else {					
 					for (var i = 0; i < rightPixelVec.length; i++) {
 						if (rightPixelVec[i] != 0) {
-							console.log("SVÄNG VÄNSTER!");
 							this.moveAngle = -4; 
 							white = 1;
 							break;
 						} 
 						else if (leftPixelVec[i] != 0) {
-							console.log("liiite mer åt höger");
 							this.moveAngle = 4;
 							white = 2;
 							break;
@@ -137,14 +130,6 @@ class Bot extends Player {
 		}
 	}
 
-	checkAngle(angle) {
-		var answer = angle % (Math.PI*2);
-		answer = (answer * 180) / Math.PI;
-		if (answer < 0)
-			answer+=360;
-		return answer; 
-	}
-
 	newPos() {
 	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index) {
 	   		this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
@@ -153,17 +138,14 @@ class Bot extends Player {
 	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
 
 	   	if (this.path.length == 0) {
-	   		console.log("NÄMEN");
-	   		console.log("player pos: ");
-	   		console.log(this.player.position);
-	   		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.gameArea.grid, this.position, this.player.position);
+
+	   		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.gameArea.grid, this.position, this.player.position);
 	   		this.pathFinding.goalIndex = goalIndex;
-				this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
-				this.path = this.pathFinding.visitedList;
+			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+			this.path = this.pathFinding.visitedList;
 	   	}
 
 	   	if (this.currentGridSection.index == this.path[0].index) {
-	   		// console.log("DUKTIG");
 	   		this.path.shift();
 	   	}
 
@@ -193,29 +175,29 @@ class Bot extends Player {
 	   	this.position.x += this.speed * Math.sin(this.angle);
 	   	this.position.y -= this.speed * Math.cos(this.angle);
 
-	   	
 	   	this.movementDecider();
+
 	   	this.checkCollisions();
+
 	   	this.update();
 	}
 
 	movementDecider() {
 		var forwardPixelVec = [];
-   	var rightPixelVec = [];
-   	var leftPixelVec = [];
-   	var forwardPixels, forwardPixelColors, rightPixelColors, leftPixelColors;
-   	var forwardCheck = {};
-   	var rightCheck = {};
-   	var leftCheck = {};
+	   	var rightPixelVec = [];
+	   	var leftPixelVec = [];
+	   	var forwardPixels, forwardPixelColors, rightPixelColors, leftPixelColors;
+	   	var forwardCheck = {};
+	   	var rightCheck = {};
+	   	var leftCheck = {};
 
-		for (var i = 0; i < 60; i++) {
+		for (var i = 0; i < 40; i++) {
 			forwardCheck.x =  this.position.x + Math.sin(this.angle)*i;
 			forwardCheck.y =  this.position.y - Math.cos(this.angle)*i;
 			rightCheck.x = this.position.x + Math.sin(this.angle+(Math.PI/8))*i;
 			rightCheck.y = this.position.y - Math.cos(this.angle+(Math.PI/8))*i;
 			leftCheck.x = this.position.x + Math.sin(this.angle-(Math.PI/8))*i;
 			leftCheck.y = this.position.y - Math.cos(this.angle-(Math.PI/8))*i;
-
 			forwardPixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x, forwardCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
 			rightPixelColors = _.reduce(this.ctx.getImageData(rightCheck.x, rightCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
 			leftPixelColors = _.reduce(this.ctx.getImageData(leftCheck.x, leftCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
@@ -226,26 +208,6 @@ class Bot extends Player {
 
 		forwardPixels = _.reduce(forwardPixelVec, function(memo, num) { return memo + num}, 0);
 		this.decide(forwardPixels, rightPixelVec, leftPixelVec);
-	}
-
-	update() {
-
-		if(this.hole == 0) {
-			this.ctx.save();
-			this.ctx.translate(this.position.x, this.position.y);
-			this.ctx.rotate(this.angle);
-		  this.ctx.fillStyle = this.color;
-			this.ctx.fillRect(this.width / 2, this.height / 2, this.width, this.height);
-			this.ctx.restore();
-			this.currentGridSection.occupation++;
-			this.gameArea.largeGrid.getCurrentGridSection(this.position).occupation++;
-
-		} else {
-			this.hole--;
-			if(this.hole == 0) {
-				this.nextHoleTimer();
-			}
-		}
 	}
 	
 }
