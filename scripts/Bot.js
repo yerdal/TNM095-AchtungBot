@@ -18,6 +18,7 @@ class Bot extends Player {
 	decide(pixels, k) {
 		var white = true;
 		if (pixels != 0) {
+			console.log("tju")
 			this.moveAngle = 4;
 			white = false;
 		}
@@ -114,20 +115,6 @@ class Bot extends Player {
 	}
 
 	newPos() {
-		var x1, x2, y1, y2;
-	   	var newAngle = this.moveAngle * Math.PI / 180;
-	   	this.angle += this.moveAngle * Math.PI / 180;
-	   	y1 = this.position.y;
-	   	x1 = this.position.x;
-	   	this.position.x += this.speed * Math.sin(this.angle);
-	   	this.position.y -= this.speed * Math.cos(this.angle);
-	   	x2 = this.position.x;
-	   	y2 = this.position.y;
-	   	var k = (y2-y1)/(x2-x1);
-	   	var pixelVec = [];
-	   	var pixels = 0;
-	   	// check if new obstacle
-	   	var newPos = {};
 
 	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index) {
 	   		this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
@@ -171,6 +158,18 @@ class Bot extends Player {
 					this.goalAngle[1] = 5;
 	   		}
 	   	}
+	   	var newAngle = this.moveAngle * Math.PI / 180;
+	   	this.angle += this.moveAngle * Math.PI / 180;
+	   	y1 = this.position.y;
+	   	x1 = this.position.x;
+	   	this.position.x += this.speed * Math.sin(this.angle);
+	   	this.position.y -= this.speed * Math.cos(this.angle);
+	   	x2 = this.position.x;
+	   	y2 = this.position.y;
+	   	var k = (y2-y1)/(x2-x1);
+	   	var pixelVec = [];
+	   	   	// check if new obstacle
+	   	var newPos = {};
 	   	for (var i = 0; i < 40; i++) {
 	   		newPos.x = this.position.x + Math.cos(Math.atan(k))*i;
 	   		newPos.y = this.position.y + Math.sin(Math.atan(k))*i;
