@@ -5,7 +5,6 @@ var BehaviorTree = require('./BehaviorTree');
 class Bot extends Player {
 	constructor(width, height, color, x, y, gameArea) {
 		super(width, height, color, x, y, gameArea);
-		var _this = this;
 		this.gridIndex = 0;
 		this.currentGrid = 0;
 		this.goalAngle = [-1 -1];
