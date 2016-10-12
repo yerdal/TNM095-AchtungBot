@@ -1,18 +1,13 @@
 const TURN_RIGHT = 4;
 const TURN_LEFT = -4;
 
-
 class BehaviorTree {
-	/*behaviorTactics(tactic){
-		switch(tactic){
-			case 0:
-				this.survieBehavior();
-			case 1:
-				this.attackBehavior();
-		}
-	}*/
+	behavior(bestGrid, grid, botPosition, playerPosition){
+		return this.attackBehavior(playerPosition, grid);
+	}
 
-	surviveBehavior(currentGrid, bestGrid, botPosition) {
+
+	surviveBehavior(bestGrid, botPosition) {
 		//console.log("Behave", bestGrid);
 		var mappedIndex;
 		let nearestEmptyIndex = this.getNearestIndex(bestGrid, botPosition);
@@ -38,10 +33,11 @@ class BehaviorTree {
 		return mappedIndex;
 	}
 
-	attackBehavior(playerPosition, botPosition){
+	attackBehavior(playerPosition, grid){
+		console.log(grid.getCurrentGridSection(playerPosition));
+		return grid.getCurrentGridSection(playerPosition).index;
 		//console.log("playerpos", playerPosition);
 		//console.log("botpos", botPosition);
-
 	}
 
 	getNearestIndex(bestGrid, botPosition){
