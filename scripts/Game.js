@@ -19,7 +19,7 @@ class Game {
 		this.largeGrid = new Grid(this.largeGridSize, this.canvas.width/this.largeGridSize, this.canvas.height/this.largeGridSize);
 		
 		this.player = new Player(3, 3, "blue", Math.floor(Math.random() * width), Math.floor(Math.random() * height), this);
-		this.enemy = new Bot(3, 3, "red", Math.floor(Math.random() * width), Math.floor(Math.random() * height), this);
+		this.enemy = new Bot(3, 3, "red", Math.floor(Math.random() * width), Math.floor(Math.random() * height), this, this.player);
 		this.player.addListeners();
 	}
 

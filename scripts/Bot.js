@@ -3,13 +3,15 @@ var _ = require("underscore");
 var PathFinding = require("./PathFinding");
 var BehaviorTree = require('./BehaviorTree');
 class Bot extends Player {
-	constructor(width, height, color, x, y, gameArea) {
+	constructor(width, height, color, x, y, gameArea, player) {
 		super(width, height, color, x, y, gameArea);
+		this.player = player;
 		this.gridIndex = 0;
 		this.currentGrid = 0;
 		this.goalAngle = [-1 -1];
  		this.behaviorTree = new BehaviorTree();
-		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
+
+		var goalIndex = this.behaviorTree.surviveBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, goalIndex);
  		this.path = this.pathFinding.visitedList;
  		this.goal = this.path.pop();
@@ -124,7 +126,7 @@ class Bot extends Player {
 
 	   	if (this.path.length == 0) {
 	   		console.log("NÄMEN");
-	   		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
+	   		var goalIndex = this.behaviorTree.surviveBehavior(this.gameArea.largeGrid.getCurrentGridSection(this.position), this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.position);
 	   		this.pathFinding.goalIndex = goalIndex;
 			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
 			this.path = this.pathFinding.visitedList;
@@ -194,6 +196,7 @@ class Bot extends Player {
 			this.ctx.restore();
 			this.currentGridSection.occupation++;
 			this.gameArea.largeGrid.getCurrentGridSection(this.position).occupation++;
+			this.behaviorTree.attackBehavior(this.player.position, this.position);
 
 		} else {
 			this.hole--;
