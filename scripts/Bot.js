@@ -25,10 +25,10 @@ class Bot extends Player {
 
 	decide(forwardPixels) {
 		var rightPixelVec = [];
-   	var leftPixelVec = [];
+   		var leftPixelVec = [];
 		var rightCheck = {};
-   	var leftCheck = {};
-   	var rightPixelColors, leftPixelColors;
+   		var leftCheck = {};
+   		var rightPixelColors, leftPixelColors;
 
 		if (forwardPixels != 0) {
 
@@ -70,12 +70,10 @@ class Bot extends Player {
 				if (this.collisionEvader == GO_LEFT) {
 					this.moveAngle = -4;
 					this.dodgeTimer--;
-					// console.log("dodgeTimer 1", this.dodgeTimer);
 				}
 				else {
 					this.moveAngle = 4;
 					this.dodgeTimer--;
-					// console.log("dodgeTimer 2", this.dodgeTimer);
 				}
 			} 
 			else {
@@ -221,12 +219,10 @@ class Bot extends Player {
 
 	   	if (this.path.length == 1 && 
 	   		this.getLargeGridIndex(this.currentGridSection.index) == this.getLargeGridIndex(this.path[0].index)) {
-	   		console.log("REACHED LARGE GRID INDEX");
 	   		this.path.shift();
 	   	}
 	   	else if (this.currentGridSection.index == this.path[0].index) {
 	   		this.path.shift();
-	   		console.log("PART GOAL");
 	   	}
 
 	   	// if pathfinding done
@@ -235,7 +231,6 @@ class Bot extends Player {
 	   		this.pathFinding.goalIndex = goalIndex;
 			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
 			this.path = this.pathFinding.visitedList;
-			console.log("REACHED GOAL");
 	   	}
 	   	// if moving to new index
 	   	else
@@ -254,8 +249,8 @@ class Bot extends Player {
 	}
 	movementDecider() {
 		var forwardPixelVec = [];
-   	var forwardPixels, forwardPixelColors;
-   	var forwardCheck = {};
+   		var forwardPixels, forwardPixelColors;
+   		var forwardCheck = {};
 
 		for (var i = 0; i < 40; i++) {
 			forwardCheck.x =  this.position.x + Math.sin(this.angle)*i;
@@ -266,9 +261,6 @@ class Bot extends Player {
 		}
 
 		forwardPixels = _.reduce(forwardPixelVec, function(memo, num) { return memo + num}, 0);
-		if (forwardPixels != 0) {
-
-		}
 		this.decide(forwardPixels);
 
 	}
