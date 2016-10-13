@@ -20,50 +20,49 @@ class Bot extends Player {
 	}
 
 	decide(forwardPixels, rightPixelVec, leftPixelVec) {
-		var white = 0;
 		if (forwardPixels != 0) {
-			console.log("KROCK PÅ G!!");
-			if (white == 1) {
-				this.moveAngle = -4;
-				white = 1;
-				this.collisionEvader = 1;
-				this.dodgeTimer = 50;
-			} else if (white == 2) {
-				this.moveAngle = 4;
-				this.collisionEvader = 2;
-				this.dodgeTimer = 50;
-				white = 2;
-			} 
-			else {
-				if (this.collisionEvader == 1 && this.dodgeTimer > 0) {
-					this.moveAngle = 4;
-					this.dodgeTimer--;
-				} else if (this.collisionEvader == 2 && this.dodgeTimer > 0) {
-					this.moveAngle = -4;
-					this.dodgeTimer--;
-				}
-				else {					
-					for (var i = 0; i < rightPixelVec.length; i++) {
-						if (rightPixelVec[i] != 0) {
-							console.log("SVÄNG VÄNSTER!");
-							this.moveAngle = -4; 
-							white = 1;
-							break;
-						} 
-						else if (leftPixelVec[i] != 0) {
-							console.log("liiite mer åt höger");
-							this.moveAngle = 4;
-							white = 2;
-							break;
-						}
+			// console.log("EVADER: ", this.collisionEvader);
+			if (this.collisionEvader == 0) {
+				this.dodgeTimer = 5;
+				for (var i = 0; i < rightPixelVec.length; i++) {
+					if (rightPixelVec[i] != 0) {
+						this.moveAngle = -4;
+						this.collisionEvader = 1;
+						break;
+					} 
+					else if (leftPixelVec[i] != 0) {
+						this.moveAngle = 4;
+						this.collisionEvader = 2;
+						break;
 					}
 				}
 			}
+			else if (this.collisionEvader == 1) {
+				this.moveAngle = -4;
+			}
+			else if (this.collisionEvader == 2) {
+				this.moveAngle = 4;
+			}
 		}
-		else if (white == 0) {
-			this.moveAngle = 0;
-			if (this.goalAngle[0] != -1) {
-				this.goToGoalAngle();
+		else {
+			if (this.dodgeTimer > 0) {
+				if (this.collisionEvader == 1) {
+					this.moveAngle = -4;
+					this.dodgeTimer--;
+					// console.log("dodgeTimer 1", this.dodgeTimer);
+				}
+				else {
+					this.moveAngle = 4;
+					this.dodgeTimer--;
+					// console.log("dodgeTimer 2", this.dodgeTimer);
+				}
+			} 
+			else {
+				this.moveAngle = 0;
+				this.collisionEvader = 0;
+				if (this.goalAngle[0] != -1) {
+					this.goToGoalAngle();
+				}
 			}
 		}
 	}
@@ -153,9 +152,9 @@ class Bot extends Player {
 	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
 
 	   	if (this.path.length == 0) {
-	   		console.log("NÄMEN");
-	   		console.log("player pos: ");
-	   		console.log(this.player.position);
+	   		// console.log("NÄMEN");
+	   		// console.log("player pos: ");
+	   		// console.log(this.player.position);
 	   		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionWithLeastOccupation(), this.gameArea.grid, this.position, this.player.position);
 	   		this.pathFinding.goalIndex = goalIndex;
 				this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
@@ -216,9 +215,9 @@ class Bot extends Player {
 			leftCheck.x = this.position.x + Math.sin(this.angle-(Math.PI/8))*i;
 			leftCheck.y = this.position.y - Math.cos(this.angle-(Math.PI/8))*i;
 
-			forwardPixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x, forwardCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
-			rightPixelColors = _.reduce(this.ctx.getImageData(rightCheck.x, rightCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
-			leftPixelColors = _.reduce(this.ctx.getImageData(leftCheck.x, leftCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
+			forwardPixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x, forwardCheck.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
+			rightPixelColors = _.reduce(this.ctx.getImageData(rightCheck.x, rightCheck.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
+			leftPixelColors = _.reduce(this.ctx.getImageData(leftCheck.x, leftCheck.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
 			forwardPixelVec.push(forwardPixelColors);
 			rightPixelVec.push(rightPixelColors);
 			leftPixelVec.push(leftPixelColors);

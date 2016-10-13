@@ -34,7 +34,7 @@ class BehaviorTree {
 	}
 
 	attackBehavior(playerPosition, grid){
-		console.log(grid.getCurrentGridSection(playerPosition));
+		// console.log(grid.getCurrentGridSection(playerPosition));
 		return grid.getCurrentGridSection(playerPosition).index;
 		//console.log("playerpos", playerPosition);
 		//console.log("botpos", botPosition);
