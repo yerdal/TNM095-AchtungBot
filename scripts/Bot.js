@@ -23,9 +23,27 @@ class Bot extends Player {
 
 	}
 
-	decide(forwardPixels, rightPixelVec, leftPixelVec) {
+	decide(forwardPixels) {
+		var rightPixelVec = [];
+   	var leftPixelVec = [];
+		var rightCheck = {};
+   	var leftCheck = {};
+   	var rightPixelColors, leftPixelColors;
+
 		if (forwardPixels != 0) {
+
 			if (this.collisionEvader == 0) {
+				for (var i = 0; i < 40; i++) {
+					rightCheck.x = this.position.x + Math.sin(this.angle+(Math.PI/8))*i;
+					rightCheck.y = this.position.y - Math.cos(this.angle+(Math.PI/8))*i;
+					leftCheck.x = this.position.x + Math.sin(this.angle-(Math.PI/8))*i;
+					leftCheck.y = this.position.y - Math.cos(this.angle-(Math.PI/8))*i;
+					rightPixelColors = _.reduce(this.ctx.getImageData(rightCheck.x, rightCheck.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
+					leftPixelColors = _.reduce(this.ctx.getImageData(leftCheck.x, leftCheck.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
+					rightPixelVec.push(rightPixelColors);
+					leftPixelVec.push(leftPixelColors);
+				}
+
 				this.dodgeTimer = 5;
 				for (var i = 0; i < rightPixelVec.length; i++) {
 					if (rightPixelVec[i] != 0) {
@@ -236,12 +254,8 @@ class Bot extends Player {
 	}
 	movementDecider() {
 		var forwardPixelVec = [];
-	   	var rightPixelVec = [];
-	   	var leftPixelVec = [];
-	   	var forwardPixels, forwardPixelColors, rightPixelColors, leftPixelColors;
-	   	var forwardCheck = {};
-	   	var rightCheck = {};
-	   	var leftCheck = {};
+   	var forwardPixels, forwardPixelColors;
+   	var forwardCheck = {};
 
 		for (var i = 0; i < 40; i++) {
 			forwardCheck.x =  this.position.x + Math.sin(this.angle)*i;
@@ -253,22 +267,13 @@ class Bot extends Player {
 
 		forwardPixels = _.reduce(forwardPixelVec, function(memo, num) { return memo + num}, 0);
 		if (forwardPixels != 0) {
-			for (var i = 0; i < 40; i++) {
-				rightCheck.x = this.position.x + Math.sin(this.angle+(Math.PI/8))*i;
-				rightCheck.y = this.position.y - Math.cos(this.angle+(Math.PI/8))*i;
-				leftCheck.x = this.position.x + Math.sin(this.angle-(Math.PI/8))*i;
-				leftCheck.y = this.position.y - Math.cos(this.angle-(Math.PI/8))*i;
-				rightPixelColors = _.reduce(this.ctx.getImageData(rightCheck.x, rightCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
-				leftPixelColors = _.reduce(this.ctx.getImageData(leftCheck.x, leftCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
-				rightPixelVec.push(rightPixelColors);
-				leftPixelVec.push(leftPixelColors);
-			}
+
 		}
-		this.decide(forwardPixels, rightPixelVec, leftPixelVec);
+		this.decide(forwardPixels);
 
 	}
 	setGoalAngle() {
-		if(this.currentGridSection.index+1 == this.path[0].index) {
+		if(this.currentGridSection.index + 1 == this.path[0].index) {
 				// go right
 				this.goalAngle[0] = 85;
 				this.goalAngle[1] = 95;
