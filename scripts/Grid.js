@@ -44,7 +44,7 @@ class Grid {
 		return this.sections[index];
 	}
 
-	getGridSectionWithLeastOccupation() {
+	getGridSectionsWithLeastOccupation() {
 		var leastOccupiedGrid = this.sections[0];
 		let leastOccupiedArray = [];
 		var better = false;
