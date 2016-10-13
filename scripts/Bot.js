@@ -140,6 +140,55 @@ class Bot extends Player {
 		}
 	}
 
+	findLargeGridIndex() {
+		var largeGridIndex;
+		var smallGridIndex;
+		// first row
+		if (smallGridIndex <= 2 || (smallGridIndex <= 11 && smallGridIndex >= 9) ||
+			(smallGridIndex >= 18 && smallGridIndex <=20)) {
+			return 0;
+		}
+
+		else if (smallGridIndex <= 5 || (smallGridIndex <= 14 && smallGridIndex >= 12) ||
+			(smallGridIndex >= 21 && smallGridIndex <= 23)) {
+			return 1;
+		}
+
+		else if (smallGridIndex <= 8 || (smallGridIndex <= 17 && smallGridIndex >= 15 ||
+			(smallGridIndex >= 24 && smallGridIndex <= 26)) {
+			return 2;
+		}
+		
+		//second row
+		else if ((smallGridIndex >= 27 && smallGridIndex <= 29) || (smallGridIndex >= 36 && smallGridIndex <= 38) ||
+			(smallGridIndex >=45 && smallGridIndex <= 47)) {
+			return 3;
+		}
+		else if ((smallGridIndex >= 30 && smallGridIndex <=32) || (smallGridIndex >=39 && smallGridIndex <=41) ||
+			(smallGridIndex >=48 && smallGridIndex <= 50)) {
+			return 4;
+		}
+		else if ((smallGridIndex >= 33 && smallGridIndex <=35) || (smallGridIndex >= 42 && smallGridIndex <= 44) ||
+			(smallGridIndex <=51 && smallGridIndex <=53)) {
+			return 5;
+		}
+
+		// third row
+		else if ((smallGridIndex >= 54 && smallGridIndex <= 56) || (smallGridIndex >= 63 && smallGridIndex <= 65) ||
+			(smallGridIndex >= 72 && smallGridIndex <= 74)) {
+			return 6;
+		}
+		else if ((smallGridIndex >= 57 && smallGridIndex <= 59) || (smallGridIndex >= 66 && smallGridIndex <= 68) ||
+			(smallGridIndex >= 75 && smallGridIndex <= 77)) {
+			return 7;
+		}
+		else if ((smallGridIndex >= 60 || smallGridIndex <= 62) || (smallGridIndex >= 69 && smallGridIndex <= 71) ||
+			(smallGridIndex >= 78 && smallGridIndex <= 80)) {
+			return 8;
+		}
+
+	}
+
 	newPos() {
 	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index) {
 	   		this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));

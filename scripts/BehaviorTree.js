@@ -4,7 +4,15 @@ const TURN_LEFT = -4;
 class BehaviorTree {
 	behavior(bestLargeGridSections, grid, botPosition, playerPosition){
 		//return this.attackBehavior(playerPosition, grid);
+		var counter = 0;
+		for (var i = 0; i < grid.sections.length; i++) {
+			if (grid.sections[i].occupation > 0)
+				counter++;
+		}
+		if (counter > grid.sections.length / 2)
+			return this.attackBehavior(playerPosition, grid);
 
+		
 		return this.surviveBehavior(bestLargeGridSections, botPosition);
 	}
 

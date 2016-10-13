@@ -65,6 +65,9 @@ class PathFinding {
 				}
 		}
 	}
+	findLargeGridIndex() {
+		
+	}
 
 
 	calcManhattan (a, b) {
