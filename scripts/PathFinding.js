@@ -65,10 +65,6 @@ class PathFinding {
 				}
 		}
 	}
-	findLargeGridIndex() {
-		
-	}
-
 
 	calcManhattan (a, b) {
 		var dist = Math.abs(Math.floor(a / 9) - Math.floor(b / 9)) + Math.abs(a % 9 - b % 9);

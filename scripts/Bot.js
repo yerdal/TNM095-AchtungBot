@@ -20,6 +20,7 @@ class Bot extends Player {
  		this.goal = this.path.pop();
  		this.collisionEvader = 0;
  		this.dodgeTimer = 0;
+
 	}
 
 	decide(forwardPixels, rightPixelVec, leftPixelVec) {
@@ -144,21 +145,19 @@ class Bot extends Player {
 		}
 	}
 
-	findLargeGridIndex() {
-		var largeGridIndex;
-		var smallGridIndex;
+	getLargeGridIndex(smallGridIndex) {
 		// first row
-		if (smallGridIndex <= 2 || (smallGridIndex <= 11 && smallGridIndex >= 9) ||
+		if ((smallGridIndex >= 0 && smallGridIndex <= 2) || (smallGridIndex >= 9 && smallGridIndex <= 11) ||
 			(smallGridIndex >= 18 && smallGridIndex <=20)) {
 			return 0;
 		}
 
-		else if (smallGridIndex <= 5 || (smallGridIndex <= 14 && smallGridIndex >= 12) ||
+		else if ((smallGridIndex >= 3 && smallGridIndex <= 5) || (smallGridIndex >= 12 && smallGridIndex <= 14) ||
 			(smallGridIndex >= 21 && smallGridIndex <= 23)) {
 			return 1;
 		}
 
-		else if (smallGridIndex <= 8 || (smallGridIndex <= 17 && smallGridIndex >= 15 ||
+		else if ((smallGridIndex >= 6 && smallGridIndex <= 8) || (smallGridIndex >= 15 && smallGridIndex <= 17) ||
 			(smallGridIndex >= 24 && smallGridIndex <= 26)) {
 			return 2;
 		}
@@ -199,16 +198,26 @@ class Bot extends Player {
 	   		this.path = this.pathFinding.visitedList;
 	   	}
 	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
+	   	// if only goal left, map to large grid index
+	   	// if part of pathfinding done
+
+	   	if (this.path.length == 1 && 
+	   		this.getLargeGridIndex(this.currentGridSection.index) == this.getLargeGridIndex(this.path[0].index)) {
+	   		console.log("REACHED LARGE GRID INDEX");
+	   		this.path.shift();
+	   	}
+	   	else if (this.currentGridSection.index == this.path[0].index) {
+	   		this.path.shift();
+	   		console.log("PART GOAL");
+	   	}
+
 	   	// if pathfinding done
 	   	if (this.path.length == 0) {
 	   		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.gameArea.grid, this.position, this.player.position);
 	   		this.pathFinding.goalIndex = goalIndex;
 			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
 			this.path = this.pathFinding.visitedList;
-	   	}
-	   	// if part of pathfinding done
-	   	if (this.currentGridSection.index == this.path[0].index) {
-	   		this.path.shift();
+			console.log("REACHED GOAL");
 	   	}
 	   	// if moving to new index
 	   	else
