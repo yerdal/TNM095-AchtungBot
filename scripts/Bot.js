@@ -2,6 +2,9 @@ var Player = require("./Player");
 var _ = require("underscore");
 var PathFinding = require("./PathFinding");
 var BehaviorTree = require('./BehaviorTree');
+const GO_LEFT = 1;
+const GO_RIGHT = 2;
+
 class Bot extends Player {
 	constructor(width, height, color, x, y, gameArea, player) {
 		super(width, height, color, x, y, gameArea);
@@ -20,49 +23,50 @@ class Bot extends Player {
 	}
 
 	decide(forwardPixels, rightPixelVec, leftPixelVec) {
-		var white = 0;
 		if (forwardPixels != 0) {
-			if (white == 1) {
-				this.moveAngle = -4;
-				white = 1;
-				this.collisionEvader = 1;
-				this.dodgeTimer = 50;
-			} else if (white == 2) {
-				this.moveAngle = 4;
-				this.collisionEvader = 2;
-				this.dodgeTimer = 50;
-				white = 2;
-			} 
-			else {
-				if (this.collisionEvader == 1 && this.dodgeTimer > 0) {
-					this.moveAngle = 4;
-					this.dodgeTimer--;
-				} else if (this.collisionEvader == 2 && this.dodgeTimer > 0) {
-					this.moveAngle = -4;
-					this.dodgeTimer--;
-				}
-				else {					
-					for (var i = 0; i < rightPixelVec.length; i++) {
-						if (rightPixelVec[i] != 0) {
-							this.moveAngle = -4; 
-							white = 1;
-							break;
-						} 
-						else if (leftPixelVec[i] != 0) {
-							this.moveAngle = 4;
-							white = 2;
-							break;
-						}
+			if (this.collisionEvader == 0) {
+				this.dodgeTimer = 5;
+				for (var i = 0; i < rightPixelVec.length; i++) {
+					if (rightPixelVec[i] != 0) {
+						this.moveAngle = -4;
+						this.collisionEvader = GO_LEFT;
+						break;
+					} 
+					else if (leftPixelVec[i] != 0) {
+						this.moveAngle = 4;
+						this.collisionEvader = GO_RIGHT;
+						break;
 					}
 				}
 			}
-		}
-		/*else if (white == 0) {
-			this.moveAngle = 0;
-			if (this.goalAngle[0] != -1) {
-				this.goToGoalAngle();
+			else if (this.collisionEvader == GO_LEFT) {
+				this.moveAngle = -4;
 			}
-		}*/
+			else if (this.collisionEvader == GO_RIGHT) {
+				this.moveAngle = 4;
+			}
+		}
+		else {
+			if (this.dodgeTimer > 0) {
+				if (this.collisionEvader == GO_LEFT) {
+					this.moveAngle = -4;
+					this.dodgeTimer--;
+					// console.log("dodgeTimer 1", this.dodgeTimer);
+				}
+				else {
+					this.moveAngle = 4;
+					this.dodgeTimer--;
+					// console.log("dodgeTimer 2", this.dodgeTimer);
+				}
+			} 
+			else {
+				this.moveAngle = 0;
+				this.collisionEvader = 0;
+				if (this.goalAngle[0] != -1) {
+					this.proceedToGoal();
+				}
+			}
+		}
 	}
 	proceedToGoal() {
 		this.moveAngle = 0;
@@ -197,7 +201,6 @@ class Bot extends Player {
 	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
 	   	// if pathfinding done
 	   	if (this.path.length == 0) {
-
 	   		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.gameArea.grid, this.position, this.player.position);
 	   		this.pathFinding.goalIndex = goalIndex;
 			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
@@ -234,7 +237,8 @@ class Bot extends Player {
 		for (var i = 0; i < 40; i++) {
 			forwardCheck.x =  this.position.x + Math.sin(this.angle)*i;
 			forwardCheck.y =  this.position.y - Math.cos(this.angle)*i;
-			forwardPixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x, forwardCheck.y, 3, 3).data, function(memo, num) { return memo + num; }, 0);
+
+			forwardPixelColors = _.reduce(this.ctx.getImageData(forwardCheck.x, forwardCheck.y, 1, 1).data, function(memo, num) { return memo + num; }, 0);
 			forwardPixelVec.push(forwardPixelColors);
 		}
 
@@ -250,11 +254,8 @@ class Bot extends Player {
 				rightPixelVec.push(rightPixelColors);
 				leftPixelVec.push(leftPixelColors);
 			}
-			this.decide(forwardPixels, rightPixelVec, leftPixelVec);
 		}
-		else {
-			this.proceedToGoal();
-		}
+		this.decide(forwardPixels, rightPixelVec, leftPixelVec);
 
 	}
 	setGoalAngle() {
