@@ -4,6 +4,7 @@ const SCREEN_WIDTH = window.innerWidth-100;
 const SCREEN_HEIGHT = window.innerHeight-100;
 var Game = require("./Game");
 var startBtn = document.getElementById("start-btn");
+var restartBtn = document.getElementById("restart-btn");
 var canvas = document.createElement("canvas");
 
 startBtn.onclick = (event) => {
