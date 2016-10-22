@@ -20,6 +20,7 @@ class Player {
 		this.holeID;
 		this.isDead = false;
 		this.currentGridSection = -1;
+		this.nextGridSectionIndex = -1;
 		this.position = {
 		    x: x,
 		    y: y
@@ -62,9 +63,12 @@ class Player {
 	    this.position.x += this.speed * Math.sin(this.angle);
 	    this.position.y -= this.speed * Math.cos(this.angle);
 	    var pixelColors = this.ctx.getImageData(this.position.x, this.position.y, 1, 1);
-
+	    this.findNextGridSection();
 	    this.checkCollisions();
 	    this.update();
+	}
+	findNextGridSection() {
+
 	}
 
 	addListeners() {

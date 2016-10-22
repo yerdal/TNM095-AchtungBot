@@ -4,7 +4,6 @@ var PathFinding = require("./PathFinding");
 var BehaviorTree = require('./BehaviorTree');
 const GO_LEFT = 1;
 const GO_RIGHT = 2;
-
 class Bot extends Player {
 	constructor(width, height, color, x, y, gameArea, player) {
 		super(width, height, color, x, y, gameArea);
@@ -12,15 +11,70 @@ class Bot extends Player {
 		this.gridIndex = 0;
 		this.currentGrid = 0;
 		this.goalAngle = [-1 -1];
- 		this.behaviorTree = new BehaviorTree();
-
-		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.gameArea.grid, this.position, player.position);
+ 		this.behaviorTree = new BehaviorTree(this.gameArea.context, this.gameArea.grid);
+ 		this.currentBehavior = "survive";
+ 		this.hasFinishedBehavior = false;
+		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.position, player.position, this.checkAngle(this.angle), this.checkAngle(player.angle), true);
 		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, goalIndex);
  		this.path = this.pathFinding.visitedList;
  		this.goal = this.path.pop();
  		this.collisionEvader = 0;
  		this.dodgeTimer = 0;
 
+	}
+
+	newPos() {
+		// get index
+		this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
+		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), 
+			this.position, this.player.position, this.checkAngle(this.angle), this.checkAngle(this.player.angle), this.hasFinishedBehavior);
+		// if new behavior
+		if (goalIndex != -1) {
+			console.log("new behavior");
+			this.pathFinding.goalIndex = goalIndex;
+			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+			this.path = this.pathFinding.visitedList;
+			this.hasFinishedBehavior = false;
+		}
+		if (this.behaviorTree.currentBehavior == "survive") {
+		   	// if last index and survive behavior, map to large grid section index
+		  	if (this.path.length == 1 && 
+		   		this.getLargeGridIndex(this.currentGridSection.index) == this.getLargeGridIndex(this.path[0].index)) {
+		   			console.log("REACHED LARGE GRID INDEX");
+		   		 	this.path.shift();
+		   	}
+		}
+
+	   	// if fallen out of path
+	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index) {
+	   	   	console.log("TJU");
+	   	   	this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+	   	   	this.path = this.pathFinding.visitedList;
+	   	}
+	   	   	// if pathfinding done
+	   	if (this.path.length == 0) {
+	   	   		this.hasFinishedBehavior = true;
+	   			console.log("REACHED GOAL");
+	   	   	}
+	   	// if part of pathfinding done
+	   	else if (this.currentGridSection.index == this.path[0].index) {
+	   		this.path.shift();
+	   		console.log("PART GOAL");
+	   	}
+	   	// if moving to new index
+	   	else
+	   	{
+	   		this.setGoalAngle();
+	   	}
+	   	this.angle += this.moveAngle * Math.PI / 180;
+	   	this.position.x += this.speed * Math.sin(this.angle);
+	   	this.position.y -= this.speed * Math.cos(this.angle);
+
+	   	this.movementDecider();
+
+	   	this.checkCollisions();
+
+	   	this.update();
 	}
 
 	decide(forwardPixels) {
@@ -208,45 +262,6 @@ class Bot extends Player {
 
 	}
 
-	newPos() {
-	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index) {
-	   		this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
-	   		this.path = this.pathFinding.visitedList;
-	   	}
-	   	this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
-	   	// if only goal left, map to large grid index
-	   	// if part of pathfinding done
-
-	   	if (this.path.length == 1 && 
-	   		this.getLargeGridIndex(this.currentGridSection.index) == this.getLargeGridIndex(this.path[0].index)) {
-	   		this.path.shift();
-	   	}
-	   	else if (this.currentGridSection.index == this.path[0].index) {
-	   		this.path.shift();
-	   	}
-
-	   	// if pathfinding done
-	   	if (this.path.length == 0) {
-	   		var goalIndex = this.behaviorTree.behavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.gameArea.grid, this.position, this.player.position);
-	   		this.pathFinding.goalIndex = goalIndex;
-			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
-			this.path = this.pathFinding.visitedList;
-	   	}
-	   	// if moving to new index
-	   	else
-	   	{
-	   		this.setGoalAngle();
-	   	}
-	   	this.angle += this.moveAngle * Math.PI / 180;
-	   	this.position.x += this.speed * Math.sin(this.angle);
-	   	this.position.y -= this.speed * Math.cos(this.angle);
-
-	   	this.movementDecider();
-
-	   	this.checkCollisions();
-
-	   	this.update();
-	}
 	movementDecider() {
 		var forwardPixelVec = [];
    		var forwardPixels, forwardPixelColors;

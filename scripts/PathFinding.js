@@ -8,7 +8,6 @@ class PathFinding {
 		this.queue = [];
 		this.goalIndex = goalIndex;
 		this.run();
-
 	}
 
 	addToQueue(obj) {
@@ -58,10 +57,10 @@ class PathFinding {
 				var adjArr = [];
 				var adjArr = this.setAdjacentSections(this.positionCheck());
 				for (var i = 0; i < adjArr.length; i++) {
-					this.grid.sections[adjArr[i]].h = this.calcManhattan(adjArr[i], this.goalIndex);
-					this.grid.sections[adjArr[i]].g++;
-					this.grid.sections[adjArr[i]].f = this.grid.sections[adjArr[i]].g + this.grid.sections[adjArr[i]].h;
-					this.addToQueue(this.grid.sections[adjArr[i]]);
+						this.grid.sections[adjArr[i]].h = this.calcManhattan(adjArr[i], this.goalIndex);
+						this.grid.sections[adjArr[i]].g++;
+						this.grid.sections[adjArr[i]].f = this.grid.sections[adjArr[i]].g + this.grid.sections[adjArr[i]].h;
+						this.addToQueue(this.grid.sections[adjArr[i]]);
 				}
 		}
 	}

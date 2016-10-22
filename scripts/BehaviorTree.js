@@ -2,24 +2,77 @@ const TURN_RIGHT = 4;
 const TURN_LEFT = -4;
 
 class BehaviorTree {
-	behavior(bestLargeGridSections, grid, botPosition, playerPosition){
-		//return this.attackBehavior(playerPosition, grid);
-		var counter = 0;
-		for (var i = 0; i < grid.sections.length; i++) {
-			if (grid.sections[i].occupation > 0)
-				counter++;
-		}
-		if (counter > grid.sections.length / 2)
-			return this.attackBehavior(playerPosition, grid);
-
-		
-		return this.surviveBehavior(bestLargeGridSections, botPosition);
+	constructor(ctx, grid) {
+		this.ctx = ctx;
+		this.grid = grid;
 	}
 
+	getBehavior(bestLargeGridSections, botPosition, playerPosition, botAngle, playerAngle, hasFinishedBehavior) {
+		this.bestLargeGridSections = bestLargeGridSections;
+		this.botPosition = botPosition;
+		this.playerPosition = playerPosition;
+		this.botAngle = botAngle;
+		this.playerAngle = playerAngle;
 
-	surviveBehavior(bestLargeGridSections, botPosition) {
+		if (hasFinishedBehavior) {
+			if (this.shouldAttack()) {
+					// go to 30 px in front of player
+					var playerNextPosition = {x: 0, y: 0};
+					playerNextPosition.x =  this.playerPosition.x + Math.sin(this.playerAngle * (Math.PI/180))*30;
+					playerNextPosition.y =  this.playerPosition.y - Math.cos(this.playerAngle * (Math.PI/180))*30;
+					this.currentBehavior = "attack";
+					console.log("ATTACK");
+					console.log(this.grid.getCurrentGridSection(playerNextPosition).index);
+					return this.grid.getCurrentGridSection(playerNextPosition).index;
+			}
+			else {
+				this.currentBehavior = "survive";
+				return this.getSurviveBehaviorIndex();
+			}
+		}
+		// not yet finished survival path, but should still be able to attack if possible
+		else {
+			if (this.shouldAttack() && this.currentBehavior == "survive") {
+					// go to 30 px in front of player
+					var playerNextPosition = {x: 0, y: 0};
+					playerNextPosition.x =  this.playerPosition.x + Math.sin(this.playerAngle * (Math.PI/180))*30;
+					playerNextPosition.y =  this.playerPosition.y - Math.cos(this.playerAngle * (Math.PI/180))*30;
+					console.log("ATTAAAACK");
+					this.currentBehavior = "attack";
+					return this.grid.getCurrentGridSection(playerNextPosition).index;
+			}
+			return -1;
+		}
+
+		return -1;
+	}
+
+	shouldAttack() {
+		var angleBetweenBodies;
+		var curr;
+		var vec = {x: 0, y: 0}
+		if (this.playerAngle > this.botAngle) {
+			angleBetweenBodies = this.playerAngle - this.botAngle;
+			vec.x = this.botPosition.x + Math.sin((angleBetweenBodies) * Math.PI/180);
+			vec.y = this.botPosition.y - Math.cos((angleBetweenBodies) * Math.PI/180);
+			curr = this.playerPosition;
+		}
+		else {
+			angleBetweenBodies = this.botAngle - this.playerAngle;
+			vec.x = this.playerPosition.x + Math.sin((angleBetweenBodies) * Math.PI/180);
+			vec.y = this.playerPosition.y - Math.cos((angleBetweenBodies) * Math.PI/180);
+			curr = this.botPosition;
+		}
+		var lengthBetweenWorms = Math.sqrt(Math.pow(this.botPosition.x - this.playerPosition.x, 2) + 
+			Math.pow(this.botPosition.y - this.playerPosition.y, 2));
+		if (angleBetweenBodies < 90 && lengthBetweenWorms < 120) {
+			return true;
+		}
+		return false;
+	}
+	getSurviveBehaviorIndex() {
 		var mappedIndex;
-		let nearestEmptyIndex = this.getNearestIndex(bestLargeGridSections, botPosition);
+		let nearestEmptyIndex = this.getNearestIndex(this.bestLargeGridSections, this.botPosition);
 		if(nearestEmptyIndex.index == 0) {
 			mappedIndex = 10;
 		} else if(nearestEmptyIndex.index == 1) {
@@ -41,9 +94,12 @@ class BehaviorTree {
 		}
 		return mappedIndex;
 	}
-
-	attackBehavior(playerPosition, grid){
-		return grid.getCurrentGridSection(playerPosition).index;
+	checkAngle(angle) {
+		var answer = angle % (Math.PI*2);
+		answer = (answer * 180) / Math.PI;
+		if (answer < 0)
+			answer+=360;
+		return answer; 
 	}
 
 	getNearestIndex(bestLargeGridSections, botPosition){
