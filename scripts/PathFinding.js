@@ -66,9 +66,7 @@ class PathFinding {
 	}
 
 	calcManhattan (a, b) {
-		var dist = Math.abs(Math.floor(a / 9) - Math.floor(b / 9)) + Math.abs(a % 9 - b % 9);
-
-		return dist;
+		return Math.abs(Math.floor(a / 9) - Math.floor(b / 9)) + Math.abs(a % 9 - b % 9);
 	}
 	positionCheck() {
 		var i = this.currentGridSection.index;
@@ -97,7 +95,7 @@ class PathFinding {
 			position = "FIRST_COLUMN_NO_CORNERS";
 		}
 		else if(i % 9 == 8 && i != 8 && i != 81) {
-			position = "LAST_COLUMN_NO_CORNERS"
+			position = "LAST_COLUMN_NO_CORNERS";
 		}
 		else {
 			position = "MIDDLE";
