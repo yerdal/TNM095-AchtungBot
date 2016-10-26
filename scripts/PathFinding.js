@@ -109,37 +109,49 @@ class PathFinding {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index + 8);
+			adjSections.push(this.currentGridSection.index + 10);
 		}
 		else if (check == "LAST_ROW_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index - 8);
+			adjSections.push(this.currentGridSection.index - 10);
 		}
 		else if (check == "TOP_RIGHT_CORNER") {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index + 8);
 		}
 		else if (check == "TOP_LEFT_CORNER") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index + 10);
 		}
 		else if (check == "BOTTOM_LEFT_CORNER") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index - 8);
 		}
 		else if (check == "BOTTOM_RIGHT_CORNER") {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index - 10);
 		}
 		else if(check == "FIRST_COLUMN_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 9);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index - 8);
+			adjSections.push(this.currentGridSection.index + 10);
 		}
 		else if(check == "LAST_COLUMN_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index - 9);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index - 10);
+			adjSections.push(this.currentGridSection.index + 8);
 		}
 		// middle
 		else {
@@ -147,6 +159,12 @@ class PathFinding {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index + 9);
 			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index + 8);
+			adjSections.push(this.currentGridSection.index - 8);
+			adjSections.push(this.currentGridSection.index + 10);
+			adjSections.push(this.currentGridSection.index - 10);
+
+
 		}
 		return adjSections;
 

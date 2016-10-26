@@ -79,10 +79,10 @@ class Bot extends Player {
 
 	decide(forwardPixels) {
 		var rightPixelVec = [];
-   		var leftPixelVec = [];
+   	var leftPixelVec = [];
 		var rightCheck = {};
-   		var leftCheck = {};
-   		var rightPixelColors, leftPixelColors;
+   	var leftCheck = {};
+   	var rightPixelColors, leftPixelColors;
 
 		if (forwardPixels != 0) {
 
@@ -284,21 +284,43 @@ class Bot extends Player {
 				// go right
 				this.goalAngle[0] = 85;
 				this.goalAngle[1] = 95;
+
 			} else if(this.currentGridSection.index - 1 == this.path[0].index) {
-					// go left
-					this.goalAngle[0] = 265;
-					this.goalAngle[1] = 275;
+				// go left
+				this.goalAngle[0] = 265;
+				this.goalAngle[1] = 275;
 
 			} else if(this.currentGridSection.index + 9 == this.path[0].index) {
-					// go down
-					this.goalAngle[0] = 175;
-					this.goalAngle[1] = 185;
+				// go down
+				this.goalAngle[0] = 175;
+				this.goalAngle[1] = 185;
 
 			} else if(this.currentGridSection.index - 9 == this.path[0].index) {
-					// go up
-					this.goalAngle[0] = 355;
-					this.goalAngle[1] = 5;
-	   		}
+				// go up
+				this.goalAngle[0] = 355;
+				this.goalAngle[1] = 5;
+
+	   	} else if(this.currentGridSection.index - 8 == this.path[0].index) {
+				// go up right
+				this.goalAngle[0] = 40;
+				this.goalAngle[1] = 50;
+				
+	   	} else if(this.currentGridSection.index - 10 == this.path[0].index) {
+				// go up left
+				this.goalAngle[0] = 310;
+				this.goalAngle[1] = 320;
+				
+	   	} else if(this.currentGridSection.index + 8 == this.path[0].index) {
+				// go down left
+				this.goalAngle[0] = 220;
+				this.goalAngle[1] = 230;
+				
+	   	} else if(this.currentGridSection.index + 10 == this.path[0].index) {
+				// go down right
+				this.goalAngle[0] = 130;
+				this.goalAngle[1] = 140;
+				
+	   	}
 	}
 	
 }
