@@ -15,7 +15,7 @@ class Bot extends Player {
  		this.currentBehavior = "survive";
  		this.hasFinishedBehavior = false;
 		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.position, player.position, this.checkAngle(this.angle), this.checkAngle(player.angle), true);
-		this.pathFinding = new PathFinding(this.gameArea.grid, this.gameArea.grid.getCurrentGridSection(this.position).index, goalIndex);
+		this.pathFinding = new PathFinding(this.gameArea.grid, this.position, goalIndex);
  		this.path = this.pathFinding.visitedList;
  		this.goal = this.path.pop();
  		this.collisionEvader = 0;
@@ -32,7 +32,7 @@ class Bot extends Player {
 		if (goalIndex != -1) {
 			console.log("new behavior");
 			this.pathFinding.goalIndex = goalIndex;
-			this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+			this.pathFinding.recalculate(this.position);
 			this.path = this.pathFinding.visitedList;
 			this.hasFinishedBehavior = false;
 		}
@@ -48,7 +48,7 @@ class Bot extends Player {
 	   	// if fallen out of path
 	   	if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index) {
 	   	   	console.log("TJU");
-	   	   	this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
+	   	   	this.pathFinding.recalculate(this.position);
 	   	   	this.path = this.pathFinding.visitedList;
 	   	}
 	   	   	// if pathfinding done
@@ -87,7 +87,7 @@ class Bot extends Player {
 		if (forwardPixels != 0) {
 
 			if (this.collisionEvader == 0) {
-				for (var i = 0; i < 40; i++) {
+				for (var i = 0; i < 50; i++) {
 					rightCheck.x = this.position.x + Math.sin(this.angle+(Math.PI/8))*i;
 					rightCheck.y = this.position.y - Math.cos(this.angle+(Math.PI/8))*i;
 					leftCheck.x = this.position.x + Math.sin(this.angle-(Math.PI/8))*i;
@@ -267,7 +267,7 @@ class Bot extends Player {
    		var forwardPixels, forwardPixelColors;
    		var forwardCheck = {};
 
-		for (var i = 0; i < 40; i++) {
+		for (var i = 0; i < 50; i++) {
 			forwardCheck.x =  this.position.x + Math.sin(this.angle)*i;
 			forwardCheck.y =  this.position.y - Math.cos(this.angle)*i;
 

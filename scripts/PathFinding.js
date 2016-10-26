@@ -1,9 +1,11 @@
 
 class PathFinding {
-	constructor(grid, currentIndex, goalIndex) {
-		this.currentGridSection = grid.sections[currentIndex];
-		this.currentIndex = currentIndex;
+	constructor(grid, currentPos, goalIndex) {
+		/*this.currentGridSection = grid.sections[currentIndex];
+		this.currentIndex = currentIndex;*/
+		this.currentPos = currentPos;
 		this.grid = grid;
+		this.currentGridSection = this.grid.getCurrentGridSection(currentPos);
 		this.visitedList = [];
 		this.queue = [];
 		this.goalIndex = goalIndex;
@@ -30,10 +32,12 @@ class PathFinding {
 		}
 	}
 
-	recalculate(currentSection) {
-		this.currentGridSection = currentSection;
+	recalculate(pos) {
+		console.log("recalculating");
+		this.currentPos = pos;
 		this.visitedList = [];
 		this.queue = [];
+		this.currentGridSection = this.grid.getCurrentGridSection(pos);
 		//set g, f and h to 0 on all grid sections before recalculating
 		for (var i = 0; i < this.grid.sections.length; i++) {
 			this.grid.sections[i].g = 0;
@@ -44,8 +48,9 @@ class PathFinding {
 	}
 
 	run() {
+		console.log(this.goalIndex);
 		this.currentGridSection.g = 0;
-		this.currentGridSection.h = this.calcManhattan(this.currentGridSection.index, this.goalIndex);
+		this.currentGridSection.h = this.calcDistance(this.grid.getCurrentGridSection(this.currentPos), this.grid.getGridSection(this.goalIndex));
 		this.currentGridSection.f = this.currentGridSection.g+this.currentGridSection.h;
 		this.addToQueue(this.currentGridSection);
 		while (this.queue.length > 0) {
@@ -57,16 +62,22 @@ class PathFinding {
 				var adjArr = [];
 				var adjArr = this.setAdjacentSections(this.positionCheck());
 				for (var i = 0; i < adjArr.length; i++) {
-						this.grid.sections[adjArr[i]].h = this.calcManhattan(adjArr[i], this.goalIndex);
-						this.grid.sections[adjArr[i]].g++;
+						this.grid.sections[adjArr[i]].h = this.calcDistance(this.grid.getGridSection(adjArr[i]), this.grid.getGridSection(this.goalIndex));
+						this.grid.sections[adjArr[i]].g += this.grid.sections[adjArr[i]].h;
 						this.grid.sections[adjArr[i]].f = this.grid.sections[adjArr[i]].g + this.grid.sections[adjArr[i]].h;
 						this.addToQueue(this.grid.sections[adjArr[i]]);
 				}
 		}
 	}
 
-	calcManhattan (a, b) {
-		return Math.abs(Math.floor(a / 9) - Math.floor(b / 9)) + Math.abs(a % 9 - b % 9);
+	calcDistance (section, goalSection) {
+		var pos = {x: section.centerX, y: section.centerY};
+		var goalPos = {x: goalSection.centerX, y: goalSection.centerY};
+		var dx = Math.abs(pos.x - goalPos.x);
+		var dy = Math.abs(pos.y - goalPos.y);
+		return (dx + dy) + (1 - 2 * 1) * Math.min(dx, dy)
+
+		//return Math.abs(Math.floor(a / 9) - Math.floor(b / 9)) + Math.abs(a % 9 - b % 9);
 	}
 	positionCheck() {
 		var i = this.currentGridSection.index;
@@ -109,37 +120,53 @@ class PathFinding {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index + 8);
+			adjSections.push(this.currentGridSection + 10);
 		}
 		else if (check == "LAST_ROW_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index - 10);
+			adjSections.push(this.currentGridSection.index - 8);
+
 		}
 		else if (check == "TOP_RIGHT_CORNER") {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index + 8);
 		}
 		else if (check == "TOP_LEFT_CORNER") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index + 10);
+
 		}
 		else if (check == "BOTTOM_LEFT_CORNER") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index - 8);
+
 		}
 		else if (check == "BOTTOM_RIGHT_CORNER") {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index - 10);
+
 		}
 		else if(check == "FIRST_COLUMN_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 9);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index + 10);
+			adjSections.push(this.currentGridSection.index - 8);
 		}
 		else if(check == "LAST_COLUMN_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index - 9);
 			adjSections.push(this.currentGridSection.index + 9);
+			adjSections.push(this.currentGridSection.index + 8);
+			adjSections.push(this.currentGridSection.index - 10);
 		}
 		// middle
 		else {
@@ -147,6 +174,10 @@ class PathFinding {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index + 9);
 			adjSections.push(this.currentGridSection.index - 9);
+			adjSections.push(this.currentGridSection.index + 10);
+			adjSections.push(this.currentGridSection.index + 8);
+			adjSections.push(this.currentGridSection.index - 10);
+			adjSections.push(this.currentGridSection.index - 8);
 		}
 		return adjSections;
 

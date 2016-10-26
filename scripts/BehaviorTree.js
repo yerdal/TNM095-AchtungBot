@@ -22,10 +22,10 @@ class BehaviorTree {
 					playerNextPosition.y =  this.playerPosition.y - Math.cos(this.playerAngle * (Math.PI/180))*30;
 					this.currentBehavior = "attack";
 					console.log("ATTACK");
-					console.log(this.grid.getCurrentGridSection(playerNextPosition).index);
 					return this.grid.getCurrentGridSection(playerNextPosition).index;
 			}
 			else {
+				console.log("SURVIVE");
 				this.currentBehavior = "survive";
 				return this.getSurviveBehaviorIndex();
 			}
