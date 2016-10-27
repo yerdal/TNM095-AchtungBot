@@ -48,7 +48,8 @@ class PathFinding {
 	}
 
 	run() {
-		console.log(this.goalIndex);
+		console.log("current" + this.currentGridSection.index);
+		console.log("goal" + this.goalIndex);
 		this.currentGridSection.g = 0;
 		this.currentGridSection.h = this.calcDistance(this.grid.getCurrentGridSection(this.currentPos), this.grid.getGridSection(this.goalIndex));
 		this.currentGridSection.f = this.currentGridSection.g+this.currentGridSection.h;
@@ -57,6 +58,7 @@ class PathFinding {
 				this.currentGridSection = this.queue.pop();
 				this.visitedList.push(this.currentGridSection);
 				if (this.currentGridSection.reachedGoal()) {
+					console.log(this.visitedList);
 					return;
 				}
 				var adjArr = [];
@@ -75,7 +77,7 @@ class PathFinding {
 		var goalPos = {x: goalSection.centerX, y: goalSection.centerY};
 		var dx = Math.abs(pos.x - goalPos.x);
 		var dy = Math.abs(pos.y - goalPos.y);
-		return (dx + dy) + (1 - 2 * 1) * Math.min(dx, dy)
+		return Math.floor((dx + dy) + (1 - 2 * 1) * Math.min(dx, dy))
 
 		//return Math.abs(Math.floor(a / 9) - Math.floor(b / 9)) + Math.abs(a % 9 - b % 9);
 	}
@@ -121,7 +123,7 @@ class PathFinding {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index + 9);
 			adjSections.push(this.currentGridSection.index + 8);
-			adjSections.push(this.currentGridSection + 10);
+			adjSections.push(this.currentGridSection.index + 10);
 		}
 		else if (check == "LAST_ROW_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index + 1);
@@ -129,7 +131,6 @@ class PathFinding {
 			adjSections.push(this.currentGridSection.index - 9);
 			adjSections.push(this.currentGridSection.index - 10);
 			adjSections.push(this.currentGridSection.index - 8);
-
 		}
 		else if (check == "TOP_RIGHT_CORNER") {
 			adjSections.push(this.currentGridSection.index - 1);
@@ -140,19 +141,16 @@ class PathFinding {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index + 9);
 			adjSections.push(this.currentGridSection.index + 10);
-
 		}
 		else if (check == "BOTTOM_LEFT_CORNER") {
 			adjSections.push(this.currentGridSection.index + 1);
 			adjSections.push(this.currentGridSection.index - 9);
 			adjSections.push(this.currentGridSection.index - 8);
-
 		}
 		else if (check == "BOTTOM_RIGHT_CORNER") {
 			adjSections.push(this.currentGridSection.index - 1);
 			adjSections.push(this.currentGridSection.index - 9);
 			adjSections.push(this.currentGridSection.index - 10);
-
 		}
 		else if(check == "FIRST_COLUMN_NO_CORNERS") {
 			adjSections.push(this.currentGridSection.index + 1);
