@@ -14,10 +14,10 @@ class Bot extends Player {
  		this.behaviorTree = new BehaviorTree(this.gameArea.context, this.gameArea.grid);
  		this.currentBehavior = "survive";
  		this.hasFinishedBehavior = false;
+ 		this.currentGridSection = this.gameArea.grid.getCurrentGridSection(this.position);
 		var goalIndex = this.behaviorTree.getBehavior(this.gameArea.largeGrid.getGridSectionsWithLeastOccupation(), this.position, player.position, this.checkAngle(this.angle), this.checkAngle(player.angle), true);
-		this.pathFinding = new PathFinding(this.gameArea.grid, this.position, goalIndex);
+		this.pathFinding = new PathFinding(this.gameArea.grid, this.currentGridSection, goalIndex);
  		this.path = this.pathFinding.visitedList;
- 		console.log(this.path);
  		this.goal = this.path.pop();
  		this.collisionEvader = 0;
  		this.dodgeTimer = 0;
@@ -28,7 +28,7 @@ class Bot extends Player {
 		// if fallen out of path
 		if(this.currentGridSection.index != this.gameArea.grid.getCurrentGridSection(this.position).index) {
 		   	console.log("TJU");
-		   	this.pathFinding.recalculate(this.position);
+		   	this.pathFinding.recalculate(this.gameArea.grid.getCurrentGridSection(this.position));
 		   	this.path = this.pathFinding.visitedList;
 		}
 		// get index
@@ -39,7 +39,7 @@ class Bot extends Player {
 		if (goalIndex != -1) {
 			console.log("new behavior");
 			this.pathFinding.goalIndex = goalIndex;
-			this.pathFinding.recalculate(this.position);
+			this.pathFinding.recalculate(this.currentGridSection);
 			this.path = this.pathFinding.visitedList;
 			this.hasFinishedBehavior = false;
 		}
@@ -300,7 +300,7 @@ class Bot extends Player {
 				this.goalAngle[0] = 355;
 				this.goalAngle[1] = 5;
 
-	   	} else if(this.currentGridSection.index - 8 == this.path[0].index) {
+	   	} /*else if(this.currentGridSection.index - 8 == this.path[0].index) {
 				// go up right
 				this.goalAngle[0] = 40;
 				this.goalAngle[1] = 50;
@@ -320,7 +320,7 @@ class Bot extends Player {
 				this.goalAngle[0] = 130;
 				this.goalAngle[1] = 140;
 				
-	   	}
+	   	}*/
 	}
 	
 }
